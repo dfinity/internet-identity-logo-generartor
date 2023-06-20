@@ -6,6 +6,8 @@ An Experimental Logo Generator
 The purpose of this project is to explore a generative variation of the Internet Identity logo.
 The mockups for this project were created by Maurice (maurice@dfinity.org). Feel free to reach out to him if you have any questions.
 
+The draft for this was done using and [existing experiment](https://codepen.io/meodai/pen/dyQXGKB/43ee5a1f7e17a216c22e08432aa4e240) I had done.
+
 ## Generator
 This is a JavaScript-based generator that can produce various logo variations by adjusting different parameters.
 
