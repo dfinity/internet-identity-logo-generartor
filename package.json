@@ -1,23 +1,20 @@
 {
-  "name": "internet-identity-logo-generartor",
-  "version": "0.1.0",
-  "description": "An Experimental Logo Generator",
-  "main": "index.js",
+  "name": "internet-identity-logo-generator",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dfinity/internet-identity-logo-generartor.git"
+  "devDependencies": {
+    "@tweakpane/core": "^1.1.9",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.9"
   },
-  "keywords": [
-    "generative",
-    "design"
-  ],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dfinity/internet-identity-logo-generartor/issues"
-  },
-  "homepage": "https://github.com/dfinity/internet-identity-logo-generartor#readme"
+  "dependencies": {
+    "random-seedable": "^1.0.8",
+    "tweakpane": "^3.1.10"
+  }
 }
