@@ -1,5 +1,4 @@
-import './style.css'
-//import { setupCounter } from './counter.ts'
+import './style.css';
 import { Pane } from 'tweakpane';
 import { generateLogo, brandColorsOKLCH, shuffle } from './logo.ts';
 import { formatHex, parse, converter } from 'culori';
