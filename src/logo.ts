@@ -24,7 +24,6 @@ export const shuffle = <T>(array:T[], random:() => number = Math.random) => {
   return arrayCopy;
 }
 
-
 // colorOKLCHtoCSS converts a color in the OKLCH color space to a CSS color string
 export const colorOKLCHtoCSS = ([l, c, h]:Color, alpha = 1) => `oklch(${l}% ${c} ${h} ${alpha < 1 ? `/ ${alpha}` : ''})`;
 
@@ -35,6 +34,8 @@ export type generateLogoOptions = {
   colors?:ColorsOKLCH,
   innerPointRadius?:number,
   rings?:number,
+  rotations?:number[],
+  strokeLengths?:number[],
   ringStrokeWidth?:number,
   seed?:number,
   idPrefix?:string,
@@ -94,18 +95,14 @@ function maskCircle (
   return $circle;
 }
 
-export const strokeRanges = [
-  [0.4, 0.75],
-  [0.4, 0.6],
-];
-
 // function that returns the generated logo SVG
 export const generateLogo = ({
   colors = brandColorsOKLCH,     // all available colors in the OKLCH color space
   innerPointRadius = 20, // radius of the inner point
-  rings = 2,      // number of rings
+  rings = 2,      // number of rings,
+  rotations = new Array(2 + 1).fill(0).map((_) => Math.random()),
+  strokeLengths = new Array(2 + 1).fill(0).map((_) => Math.random() * 0.5 + 0.25),
   ringStrokeWidth = 20,   // stroke width of the rings
-  seed = 0,                // seed for the random number generator
   idPrefix = `logo-0`,       // prefix for the ids of the elements so they can be styled more than once on a page 
   logoClass = `logo`,        // class name for the logo
 }: generateLogoOptions) => {
@@ -116,9 +113,6 @@ export const generateLogo = ({
 
   $svg.setAttribute("viewBox", `0 0 ${viewBoxSize} ${viewBoxSize}`);
   $svg.classList.add(logoClass);
-
-  // shuffle the colors array
-  const colorsShuffeled = shuffle(colors);
 
   const $defs = document.createElementNS(NS, "defs"); // contains the gradients & masks
   const $style = document.createElementNS(NS, "style");
@@ -133,18 +127,17 @@ export const generateLogo = ({
       transform: rotate(calc(var(--rotation) * 360deg));
     }
   `;
-  const rotations = new Array(rings + 1).fill(0).map((_) => Math.random());
 
   // create gradients for the rings and the inner point
   const gradients = new Array(rings + 1).fill(0).map(() => document.createElementNS(NS, "linearGradient"));
 
   gradients.forEach(($gradient, i) => {
     $gradient.setAttribute("id", `${idPrefix}-gradient-${i}`);
-    $gradient.setAttribute("gradientTransform", `rotate(90)`);
+    $gradient.setAttribute("gradientTransform", `rotate(0)`);
     // set two random colors stops for each gradient
     $gradient.innerHTML = `
-      <stop offset="5%" stop-color="${colorOKLCHtoCSS(colorsShuffeled[i + 2 % colorsShuffeled.length])}"/>
-      <stop offset="95%" stop-color="${colorOKLCHtoCSS(colorsShuffeled[i + 2 % colorsShuffeled.length], 0)}"/>
+      <stop offset="5%" stop-color="${colorOKLCHtoCSS(colors[i + 2 % colors.length])}"/>
+      <stop offset="95%" stop-color="${colorOKLCHtoCSS(colors[i + 2 % colors.length], 0)}"/>
     `;
     $defs.appendChild($gradient);
   });
@@ -160,13 +153,11 @@ export const generateLogo = ({
     const $rect = rect(
       left, top, 
       d, d, 
-      `${colorOKLCHtoCSS(colorsShuffeled[i + 1 % colorsShuffeled.length])}`
+      `${colorOKLCHtoCSS(colors[i + 1 % colors.length])}`
     );
 
     $rect.style.setProperty("--rotation", `${rotations[i + 1]}`);
     $svg.appendChild($rect);
-
-    const dashLength = strokeRanges[i][0] + Math.random() * (strokeRanges[i][1] - strokeRanges[i][0]);
 
     const $maskCicle = maskCircle(
       viewBoxSize / 2,
@@ -174,7 +165,7 @@ export const generateLogo = ({
       r - ringStrokeWidth / 2,
       ringStrokeWidth,
       0,
-      dashLength,
+      strokeLengths[i],
     );
 
     const $mask = document.createElementNS(NS, "mask");
@@ -186,8 +177,8 @@ export const generateLogo = ({
   });
 
   const $innerCircle = circle(
-    (viewBoxSize - innerPointDiameter),
-    (viewBoxSize - innerPointDiameter),
+    viewBoxSize / 2,
+    viewBoxSize / 2,
     innerPointRadius,
     `url(#${idPrefix}-gradient-${rings})`
   );
