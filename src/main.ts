@@ -116,6 +116,13 @@ pane.addInput(SETTINGS, 'strokeLength2', {
   step: 0.001,
 });
 
+pane.addInput(SETTINGS, 'outerRingColor1');
+pane.addInput(SETTINGS, 'outerRingColor2');
+pane.addInput(SETTINGS, 'innerRingColor1');
+pane.addInput(SETTINGS, 'innerRingColor2');
+pane.addInput(SETTINGS, 'innerPointColor1');
+
+
 pane.addInput(SETTINGS, 'gradientStopStart', {
   label: 'gradient start',
   min: 0,
@@ -129,13 +136,6 @@ pane.addInput(SETTINGS, 'gradientStopEnd', {
   max: 1,
   step: 0.001,
 });
-
-pane.addInput(SETTINGS, 'outerRingColor1');
-pane.addInput(SETTINGS, 'outerRingColor2');
-pane.addInput(SETTINGS, 'innerRingColor1');
-pane.addInput(SETTINGS, 'innerRingColor2');
-pane.addInput(SETTINGS, 'innerPointColor1');
-
 
 pane.addInput(SETTINGS, 'rotationOffset1', {
   label: 'inner offset',
