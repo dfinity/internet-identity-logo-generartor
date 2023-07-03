@@ -6,6 +6,25 @@ import anime from 'animejs/lib/anime.es.js';
 import * as Rand from 'random-seed';
 import colorNameList from 'color-name-list/dist/colornames.json';
 
+function updateFavicon ($svg: SVGElement) {
+  const $canvas = document.createElement('canvas');
+  const ctx = $canvas.getContext('2d');
+  const $favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
+  
+  $canvas.width = 32;
+  $canvas.height = 32;
+
+  const svgString = new XMLSerializer().serializeToString($svg);
+  const img = new Image();
+  img.src = 'data:image/svg+xml;base64,' + btoa(svgString);
+  img.onload = () => {
+    ctx?.drawImage(img, 0, 0);
+    $favicon.href = $canvas.toDataURL();
+  }
+
+  $favicon.href = $canvas.toDataURL();
+}
+
 function reroll () {
   const seed = colorNameList[Math.floor(Math.random() * colorNameList.length)].name;
   const rand = Rand.create(seed);
@@ -216,7 +235,9 @@ function drawEverything() {
         </svg>
       </div>
     </div>
-  `
+  `;
+
+  updateFavicon($logo);
 }
 
 type SvgInHtml = HTMLElement & SVGElement;
