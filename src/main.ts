@@ -1,10 +1,10 @@
 import './style.css';
 import { Pane } from 'tweakpane';
-import { generateLogo, brandColorsOKLCH, shuffle } from './logo.ts';
+import { generateLogo, brandColorsOKLCH, shuffle, ColorsOKLCH } from './logo.ts';
 import { formatHex, parse, converter } from 'culori';
 import anime from 'animejs/lib/anime.es.js';
 import * as Rand from 'random-seed';
-import { colorNameList } from 'color-name-list';
+import colorNameList from 'color-name-list/dist/colornames.json';
 
 function reroll () {
   const seed = colorNameList[Math.floor(Math.random() * colorNameList.length)].name;
@@ -49,11 +49,13 @@ function reroll () {
 
 let { SETTINGS, rand } = reroll();
 
+rand.random();
+
 const pane = new Pane({
   title: 'Logo Generator Settings',
 });
 
-pane.on('change', (ev) => {
+pane.on('change', () => {
   drawEverything();
 });
 
@@ -154,7 +156,7 @@ pane.addInput(SETTINGS, 'rotationOffset2', {
 
 pane.addButton({
   title: 'Reroll',
-}).on('click', (ev) => {
+}).on('click', () => {
   const newSettings = reroll().SETTINGS;
   newSettings.darkMode = SETTINGS.darkMode;
   newSettings.visualDebug = SETTINGS.visualDebug;
@@ -170,11 +172,13 @@ const toOKlch = converter('oklch');
 let $logo: SVGElement | null = null;
 
 function drawEverything() {
-  const colors = [
+  const colorsHex = [
     SETTINGS.outerRingColor1, SETTINGS.outerRingColor2,
     SETTINGS.innerRingColor1, SETTINGS.innerRingColor2,
     SETTINGS.innerPointColor1,
-  ].map((color) => {
+  ];
+
+  const colors:ColorsOKLCH = colorsHex.map((color) => {
     const c = parse(color);
     const lch = toOKlch(c);
     return [(lch?.l || 0) * 100, lch?.c || 0, lch?.h || 0];
@@ -302,7 +306,7 @@ pane.addInput(SETTINGS, 'easingFunction', {
 
 pane.addButton({
   title: 'Animate',
-}).on('click', (ev) => {
+}).on('click', () => {
   animateRotations();
 });
 
@@ -321,11 +325,11 @@ pane.addInput(SETTINGS, 'fontFamily', {
   },
 });
 
-pane.addInput(SETTINGS, 'darkMode').on('change', (ev) => {
+pane.addInput(SETTINGS, 'darkMode').on('change', () => {
   document.body.classList.toggle('is-dark', SETTINGS.darkMode);
 });
 
-pane.addInput(SETTINGS, 'visualDebug').on('change', (ev) => {
+pane.addInput(SETTINGS, 'visualDebug').on('change', () => {
   document.body.classList.toggle('visual-debug', SETTINGS.visualDebug);
 });
 

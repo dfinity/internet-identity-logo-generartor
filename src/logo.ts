@@ -199,10 +199,7 @@ export const generateLogo = ({
 
   $svg.appendChild($innerCircle);
 
-  const reversedDiameters = [...diameters].reverse();
-
   const $gradientRects = diameters.map((d, i) => {
-    const r = d / 2;
     const left = (viewBoxSize - d) / 2;
     const top = left;
     const $rect = rect(
