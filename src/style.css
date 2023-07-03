@@ -130,17 +130,22 @@ body {
 }
 
 svg {
+  display: block;
   width: calc(80vmin - 300px);
-  aspect-ratio: 1;
 }
 
-h1 {
-  font-family: 'strawfordblack';
-  font-size: 5vmin;
-  max-width: 18ch;
+h1, h2, h3 {
+  font-family: monospace;
   line-height: 1;
-  margin: 0 0 1em;
+  margin: 1em 0;
+   font-size: 3vmin;
+   font-weight: normal;
 }
+h1 {
+  font-size: 3vmin;
+  max-width: 18ch;
+}
+
 
 svg rect, svg circle{
   will-change: transform;

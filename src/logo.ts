@@ -195,7 +195,6 @@ export const generateLogo = ({
 
   const reversedDiameters = [...diameters].reverse();
 
-
   const $gradientRects = diameters.map((d, i) => {
     const r = d / 2;
     const left = (viewBoxSize - d) / 2;

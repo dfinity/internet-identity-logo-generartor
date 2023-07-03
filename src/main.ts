@@ -146,12 +146,13 @@ function drawEverything() {
 
   document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <div>
-      <h1>Internet Identity Logo Generator</h1>
+      <h1>Logo Master</h1>
       <div class="logo logo--main">${$logo.outerHTML}</div>
+      <h2>Logo Inline</h2>
       <div class="logo logo--line">
-        <svg viewBox="0 0 2000 200">
+        <svg viewBox="0 0 2000 300">
           <use href="#logo" x="0" y="0" width="300" height="300" />
-          <text x="400" y="200" font-size="200" font-family="strawfordbold" fill="currentColor">Internet Identity</text>
+          <text x="400" y="220" font-size="200" font-family="strawfordbold" fill="currentColor">Internet Identity</text>
         </svg>
       </div>
     </div>
@@ -170,8 +171,8 @@ function animateRotations() {
   const $layer11 = $layers[0];
   const $layer21 = $layers[1];
   const $layer3 = $layers[2];
-  const $layer12 = $layers[3];
-  const $layer22 = $layers[4];
+  const $layer12 = $layers[4];
+  const $layer22 = $layers[3];
 
   const currentRotationsObject = {
     rotation1: currentRotations[0],
@@ -192,16 +193,12 @@ function animateRotations() {
       $layer3.style.setProperty('--rotation', `${currentRotationsObject.rotation3}`);
       $layer12.style.setProperty('--rotation', `${currentRotationsObject.rotation1}`);
       $layer22.style.setProperty('--rotation', `${currentRotationsObject.rotation2}`);
-
+    },
+    complete: () => {
       SETTINGS.rotation1 = currentRotationsObject.rotation1 % 1;
       SETTINGS.rotation2 = currentRotationsObject.rotation2 % 1;
       SETTINGS.rotation3 = currentRotationsObject.rotation3 % 1;
-
-
-        pane.refresh();
-    },
-    complete: () => {
-
+      //pane.refresh();
     }
   }) 
 }
