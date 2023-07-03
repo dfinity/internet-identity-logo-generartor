@@ -4,7 +4,7 @@ import { generateLogo, brandColorsOKLCH, shuffle } from './logo.ts';
 import { formatHex, parse, converter } from 'culori';
 import anime from 'animejs/lib/anime.es.js';
 import * as Rand from 'random-seed';
-import {colorNameList} from 'color-name-list';
+import { colorNameList } from 'color-name-list';
 
 function reroll () {
   const seed = colorNameList[Math.floor(Math.random() * colorNameList.length)].name;
@@ -58,6 +58,7 @@ pane.addInput(SETTINGS, 'seed').on('change', (ev) => {
   const newSettings = reroll().SETTINGS;
   newSettings.darkMode = SETTINGS.darkMode;
   newSettings.visualDebug = SETTINGS.visualDebug;
+  Object.assign(SETTINGS, newSettings);
   drawEverything();
 });
 
