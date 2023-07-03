@@ -111,7 +111,7 @@ export const generateLogo = ({
   ringStrokeWidth = 20,   // stroke width of the rings
   idPrefix = `logo-0`,       // prefix for the ids of the elements so they can be styled more than once on a page 
   logoClass = `logo`,        // class name for the logo
-  gradientStops = [.05, .95], // stops percents for the gradients
+  gradientStops = [.2, .8], // stops percents for the gradients
 }: generateLogoOptions) => {
   const $svg = document.createElementNS(NS, "svg");
 

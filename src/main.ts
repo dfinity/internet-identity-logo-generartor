@@ -33,8 +33,8 @@ function reroll () {
     innerRingColor2: colorsAsHex[3],
     innerPointColor1: colorsAsHex[4],
 
-    gradientStopStart: 0.05,
-    gradientStopEnd: 0.95,
+    gradientStopStart: 0.2,
+    gradientStopEnd: 0.8,
 
     darkMode: false,
 
