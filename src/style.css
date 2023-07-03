@@ -170,7 +170,6 @@ h1, h2, h3 {
   display: none;
 }
 
-
 svg rect, svg circle{
   will-change: transform;
 }
@@ -183,7 +182,6 @@ svg rect, svg circle{
 .visual-debug rect,
 .visual-debug circle {
   transform: translateY(calc(var(--layer) * -7%)) rotateX(-45deg) rotate(calc(var(--rotation) * 360deg))!important ;
-  transform-origin: 50% 50% 0;
 }
 
 .visual-debug rect:nth-child(1),

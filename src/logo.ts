@@ -35,11 +35,13 @@ export type generateLogoOptions = {
   innerPointRadius?:number,
   rings?:number,
   rotations?:number[],
+  rotationOffsets?:number[],
   strokeLengths?:number[],
   ringStrokeWidth?:number,
   seed?:number,
   idPrefix?:string,
   logoClass?:string,
+  gradientStops?:number[],
 }
 
 function rect (x:number, y:number, width:number, height:number, fill:string) {
@@ -104,10 +106,12 @@ export const generateLogo = ({
   innerPointRadius = 20, // radius of the inner point
   rings = 2,      // number of rings,
   rotations = new Array(2 + 1).fill(0).map((_) => Math.random()),
+  rotationOffsets = new Array(2 + 1).fill(0).map((_) => Math.random()),
   strokeLengths = new Array(2 + 1).fill(0).map((_) => Math.random() * 0.5 + 0.25),
   ringStrokeWidth = 20,   // stroke width of the rings
   idPrefix = `logo-0`,       // prefix for the ids of the elements so they can be styled more than once on a page 
   logoClass = `logo`,        // class name for the logo
+  gradientStops = [.05, .95], // stops percents for the gradients
 }: generateLogoOptions) => {
   const $svg = document.createElementNS(NS, "svg");
 
@@ -127,7 +131,7 @@ export const generateLogo = ({
     .${logoClass} .shape {
       transform-box: fill-box;
       transform-origin: center;
-      transform: rotate(calc(var(--rotation) * 360deg));
+      transform: rotate(calc(var(--rotation) * 360deg + var(--rotationOffset, 1) * 360deg));
     }
   `;
 
@@ -137,10 +141,11 @@ export const generateLogo = ({
   gradients.forEach(($gradient, i) => {
     $gradient.setAttribute("id", `${idPrefix}-gradient-${i}`);
     $gradient.setAttribute("gradientTransform", `rotate(0)`);
+    $gradient.setAttribute("gradientUnits", `userSpaceOnUse`);
     // set two random colors stops for each gradient
     $gradient.innerHTML = `
-      <stop offset="5%" stop-color="${colorOKLCHtoCSS(colors[(i + 3) % colors.length])}"/>
-      <stop offset="95%" stop-color="${colorOKLCHtoCSS(colors[(i + 3) % colors.length], 0)}"/>
+      <stop offset="${gradientStops[0] * 100}%" stop-color="${colorOKLCHtoCSS(colors[(i + 3) % colors.length])}"/>
+      <stop offset="${gradientStops[1] * 100}%" stop-color="${colorOKLCHtoCSS(colors[(i + 3) % colors.length], 0)}"/>
     `;
     $defs.appendChild($gradient);
   });
@@ -160,6 +165,7 @@ export const generateLogo = ({
     );
 
     $rect.style.setProperty("--rotation", `${rotations[i + 1]}`);
+    $rect.style.setProperty("--rotationOffset", `${rotationOffsets[i]}`);
     $rect.setAttribute("data-layer", `${i + 1}`);
     $svg.appendChild($rect);
 
@@ -187,7 +193,7 @@ export const generateLogo = ({
     `url(#${idPrefix}-gradient-${rings})`
   );
 
-  $innerCircle.style.setProperty("--rotation", `${rotations[0]}`)
+  $innerCircle.style.setProperty("--rotation", `${rotations[0]}`);
 
   $innerCircle.setAttribute("data-layer", `0`);
 

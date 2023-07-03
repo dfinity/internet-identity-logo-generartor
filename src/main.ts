@@ -22,6 +22,8 @@ function reroll () {
     rotation1: rand.random(),
     rotation2: rand.random(),
     rotation3: rand.random(),
+    rotationOffset1: 0,
+    rotationOffset2: 0,
     strokeLength1: 0.4 + rand.random() * 0.35,
     strokeLength2: 0.2 + rand.random() * 0.2,
     
@@ -30,6 +32,9 @@ function reroll () {
     innerRingColor1: colorsAsHex[2],
     innerRingColor2: colorsAsHex[3],
     innerPointColor1: colorsAsHex[4],
+
+    gradientStopStart: 0.05,
+    gradientStopEnd: 0.95,
 
     darkMode: false,
 
@@ -66,57 +71,86 @@ pane.addInput(SETTINGS, 'innerPointRadius', {
   label: 'inner radius',
   min: 1,
   max: 100,
-  step: 0.01,
+  step: 0.001,
 });
 
 pane.addInput(SETTINGS, 'ringStrokeWidth', {
   label: 'stroke width',
   min: 1,
   max: 100,
-  step: 0.01,
+  step: 0.001,
 });
 
 pane.addInput(SETTINGS, 'rotation1', {
   label: 'center rotation',
   min: 0,
   max: 1,
-  step: 0.01,
+  step: 0.001,
 });
 
 pane.addInput(SETTINGS, 'rotation2', {
   label: 'outer rotation',
   min: 0,
   max: 1,
-  step: 0.01,
+  step: 0.001,
 });
 
 pane.addInput(SETTINGS, 'rotation3', {
   label: 'inner rotation',
   min: 0,
   max: 1,
-  step: 0.01,
+  step: 0.001,
 });
 
 pane.addInput(SETTINGS, 'strokeLength1', {
   label: 'outer length',
   min: .01,
   max: 1,
-  step: 0.01,
+  step: 0.001,
 });
 
 pane.addInput(SETTINGS, 'strokeLength2', {
   label: 'inner length',
   min: .01,
   max: 1,
-  step: 0.01,
+  step: 0.001,
 });
 
+pane.addInput(SETTINGS, 'gradientStopStart', {
+  label: 'gradient start',
+  min: 0,
+  max: 1,
+  step: 0.001,
+});
+
+pane.addInput(SETTINGS, 'gradientStopEnd', {
+  label: 'gradient end',
+  min: 0,
+  max: 1,
+  step: 0.001,
+});
 
 pane.addInput(SETTINGS, 'outerRingColor1');
 pane.addInput(SETTINGS, 'outerRingColor2');
 pane.addInput(SETTINGS, 'innerRingColor1');
 pane.addInput(SETTINGS, 'innerRingColor2');
 pane.addInput(SETTINGS, 'innerPointColor1');
+
+
+pane.addInput(SETTINGS, 'rotationOffset1', {
+  label: 'inner offset',
+  min: -1,
+  max: 1,
+  step: 0.001,
+});
+
+
+pane.addInput(SETTINGS, 'rotationOffset2', {
+  label: 'outer offset',
+  min: -1,
+  max: 1,
+  step: 0.001,
+});
 
 pane.addButton({
   title: 'Reroll',
@@ -152,7 +186,9 @@ function drawEverything() {
     rings: SETTINGS.rings,
     ringStrokeWidth: SETTINGS.ringStrokeWidth,
     rotations: [SETTINGS.rotation1, SETTINGS.rotation2, SETTINGS.rotation3],
+    rotationOffsets: [SETTINGS.rotationOffset1, SETTINGS.rotationOffset2],
     strokeLengths: [SETTINGS.strokeLength1, SETTINGS.strokeLength2],
+    gradientStops: [SETTINGS.gradientStopStart, SETTINGS.gradientStopEnd],
   });
 
   $logo.setAttribute('id', 'logo');
