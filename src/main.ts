@@ -3,33 +3,36 @@ import { Pane } from 'tweakpane';
 import { generateLogo, brandColorsOKLCH, shuffle } from './logo.ts';
 import { formatHex, parse, converter } from 'culori';
 
-const colors = shuffle(brandColorsOKLCH);
-const colorsAsHex = colors.map((color) => formatHex({
-  mode: 'oklch', l: color[0]/100, c: color[1], h: color[2]
-}));
 
-console.log(colors,colorsAsHex)
+function reroll () {
+  const colors = shuffle(brandColorsOKLCH);
+  const colorsAsHex = colors.map((color) => formatHex({
+    mode: 'oklch', l: color[0]/100, c: color[1], h: color[2]
+  }));
+  const SETTINGS = {
+    innerPointRadius: 20,
+    rings: 2,
+    ringStrokeWidth: 20,
+    rotation1: Math.random(),
+    rotation2: Math.random(),
+    rotation3: Math.random(),
+    strokeLength1: 0.4 + Math.random() * 0.35,
+    strokeLength2: 0.2 + Math.random() * 0.2,
+    
+    outerRingColor1: colorsAsHex[0],
+    outerRingColor2: colorsAsHex[1],
+    innerRingColor1: colorsAsHex[2],
+    innerRingColor2: colorsAsHex[3],
+    innerPointColor1: colorsAsHex[4],
 
-const SETTINGS = {
-  innerPointRadius: 20,
-  rings: 2,
-  ringStrokeWidth: 20,
-  rotation1: Math.random(),
-  rotation2: Math.random(),
-  rotation3: Math.random(),
-  strokeLength1: 0.4 + Math.random() * 0.35,
-  strokeLength2: 0.2 + Math.random() * 0.2,
-  
-  outerRingColor1: colorsAsHex[0],
-  outerRingColor2: colorsAsHex[1],
-  innerRingColor1: colorsAsHex[2],
-  innerRingColor2: colorsAsHex[3],
-  innerPointColor1: colorsAsHex[4],
+    darkMode: false,
 
-  darkMode: false,
+    visualDebug: false,
+  };
+  return { colors, SETTINGS };
+}
 
-  visualDebug: false,
-};
+const { SETTINGS } = reroll();
 
 const pane = new Pane();
 
@@ -38,42 +41,49 @@ pane.on('change', (ev) => {
 });
 
 pane.addInput(SETTINGS, 'innerPointRadius', {
+  label: 'inner radius',
   min: 1,
   max: 100,
   step: 1,
 });
 
 pane.addInput(SETTINGS, 'ringStrokeWidth', {
+  label: 'stroke width',
   min: 1,
   max: 100,
   step: 1,
 });
 
 pane.addInput(SETTINGS, 'rotation1', {
+  label: 'center rotation',
   min: 0,
   max: 1,
   step: 0.01,
 });
 
 pane.addInput(SETTINGS, 'rotation2', {
+  label: 'outer rotation',
   min: 0,
   max: 1,
   step: 0.01,
 });
 
 pane.addInput(SETTINGS, 'rotation3', {
+  label: 'inner rotation',
   min: 0,
   max: 1,
   step: 0.01,
 });
 
 pane.addInput(SETTINGS, 'strokeLength1', {
+  label: 'outer length',
   min: .01,
   max: 1,
   step: 0.01,
 });
 
 pane.addInput(SETTINGS, 'strokeLength2', {
+  label: 'inner length',
   min: .01,
   max: 1,
   step: 0.01,
@@ -93,6 +103,17 @@ pane.addInput(SETTINGS, 'visualDebug').on('change', (ev) => {
   document.body.classList.toggle('visual-debug', SETTINGS.visualDebug);
 });
 
+pane.addButton({
+  title: 'Reroll',
+}).on('click', (ev) => {
+  const newSettings = reroll().SETTINGS;
+  newSettings.darkMode = SETTINGS.darkMode;
+  newSettings.visualDebug = SETTINGS.visualDebug;
+  Object.assign(SETTINGS, newSettings);
+  drawEverything();
+  pane.refresh();
+});
+  
 
 /*
 
