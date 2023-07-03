@@ -107,11 +107,8 @@
 }
 
 :root {
-
   font-family: 'strawfordlight';
-
   background: #fff;
-  
 }
 html {
   padding: 0;
@@ -125,24 +122,27 @@ html {
 
 body {
   margin: 0;
-  padding: 10vmin 300px 10vmin 10vmin;
   min-height: 100vh;
+}
+
+.logos {
+  box-sizing: border-box;
+  padding: 3rem 20rem 3rem 3rem;
+  width: 100%;
+  max-width: 60rem;
 }
 
 svg {
   display: block;
-  width: calc(80vmin - 300px);
+  width: 100%;
 }
 
 h1, h2, h3 {
   font-family: monospace;
   line-height: 1;
-  margin: 1em 0;
-   font-size: 3vmin;
+    margin: 1em 0;
+   font-size: 2vmin;
    font-weight: normal;
-}
-h1 {
-  font-size: 3vmin;
   max-width: 18ch;
 }
 

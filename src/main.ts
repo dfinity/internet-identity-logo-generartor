@@ -39,7 +39,9 @@ function reroll () {
 
 const { SETTINGS } = reroll();
 
-const pane = new Pane();
+const pane = new Pane({
+  title: 'Logo Generator Settings',
+});
 
 pane.on('change', (ev) => {
   drawEverything();
