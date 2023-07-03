@@ -25,6 +25,10 @@ const SETTINGS = {
   innerRingColor1: colorsAsHex[2],
   innerRingColor2: colorsAsHex[3],
   innerPointColor1: colorsAsHex[4],
+
+  darkMode: false,
+
+  visualDebug: false,
 };
 
 const pane = new Pane();
@@ -80,6 +84,15 @@ pane.addInput(SETTINGS, 'outerRingColor2');
 pane.addInput(SETTINGS, 'innerRingColor1');
 pane.addInput(SETTINGS, 'innerRingColor2');
 pane.addInput(SETTINGS, 'innerPointColor1');
+
+pane.addInput(SETTINGS, 'darkMode').on('change', (ev) => {
+  document.body.classList.toggle('is-dark', SETTINGS.darkMode);
+});
+
+pane.addInput(SETTINGS, 'visualDebug').on('change', (ev) => {
+  document.body.classList.toggle('visual-debug', SETTINGS.visualDebug);
+});
+
 
 /*
 

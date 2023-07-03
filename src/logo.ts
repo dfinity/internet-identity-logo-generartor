@@ -6,7 +6,7 @@ export type ColorsOKLCH = Color[];
 // to make use of the full gamut of colors a given display has to offer
 
 export const brandColorsOKLCH:ColorsOKLCH = [
-  [2.79, 0.009, 0],
+  //[2.79, 0.009, 0],
   [68.97, 0.241, 38.21],
   [81.62, 0.194, 73.74],
   [66.03, 0.295, 2.63],

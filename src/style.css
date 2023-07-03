@@ -107,9 +107,26 @@
 }
 
 :root {
-  padding: 10vmin 300px 10vmin 10vmin;
 
   font-family: 'strawfordlight';
+
+  background: #fff;
+  
+}
+html {
+  padding: 0;
+  margin: 0;
+}
+
+.is-dark {
+  background: #202125;
+  color: #fff;
+}
+
+body {
+  margin: 0;
+  padding: 10vmin 300px 10vmin 10vmin;
+  min-height: 100vh;
 }
 
 svg {
@@ -123,5 +140,44 @@ h1 {
   max-width: 18ch;
   line-height: 1;
   margin: 0 0 1em;
+}
 
+.visual-debug svg {
+  overflow: visible;
+  transform-style: preserve-3d;
+}
+
+.visual-debug rect,
+.visual-debug circle {
+  transform: translateY(calc(var(--layer) * -.5em)) rotateX(-45deg) rotate(calc(var(--rotation) * 360deg))!important ;
+  transform-origin: 50% 50% 0;
+}
+
+.visual-debug rect:nth-child(1),
+.visual-debug circle:nth-child(1) {
+  --layer: -3;
+}
+.visual-debug rect:nth-child(2),
+.visual-debug circle:nth-child(2) {
+  --layer: -1;
+}
+
+.visual-debug rect:nth-child(3),
+.visual-debug circle:nth-child(3) {
+  --layer: 0;
+}
+
+.visual-debug rect:nth-child(4),
+.visual-debug circle:nth-child(4) {
+  --layer: 1;
+}
+
+.visual-debug rect:nth-child(5),
+.visual-debug circle:nth-child(5) {
+  --layer: 2;
+}
+
+.visual-debug rect:nth-child(6),
+.visual-debug circle:nth-child(6) {
+  --layer: 3;
 }
