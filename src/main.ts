@@ -11,8 +11,8 @@ function updateFavicon ($svg: SVGElement) {
   const ctx = $canvas.getContext('2d');
   const $favicon = document.querySelector('link[rel="icon"]') as HTMLLinkElement;
   
-  $canvas.width = 32;
-  $canvas.height = 32;
+  $canvas.width = 64;
+  $canvas.height = 64;
 
   const svgString = new XMLSerializer().serializeToString($svg);
   const img = new Image();
