@@ -1,6 +1,12 @@
 import './style.css';
 import { Pane } from 'tweakpane';
-import { generateLogo, brandColorsOKLCH, shuffle, ColorsOKLCH } from './logo.ts';
+import { 
+  generateLogo, 
+  brandColorsOKLCH, 
+  shuffle, 
+  ColorsOKLCH, 
+  StrokeLinecap 
+} from './logo.ts';
 import { formatHex, parse, converter } from 'culori';
 import anime from 'animejs/lib/anime.es.js';
 import * as Rand from 'random-seed';
@@ -43,9 +49,12 @@ function reroll () {
     rotation3: rand.random(),
     rotationOffset1: 0,
     rotationOffset2: 0,
+
     strokeLength1: 0.4 + rand.random() * 0.35,
     strokeLength2: 0.4 + rand.random() * 0.3,
     
+    strokeLinecap: 'round',
+
     outerRingColor1: colorsAsHex[0],
     outerRingColor2: colorsAsHex[1],
     innerRingColor1: colorsAsHex[2],
@@ -102,6 +111,15 @@ pane.addInput(SETTINGS, 'ringStrokeWidth', {
   min: 1,
   max: 100,
   step: 0.001,
+});
+
+pane.addInput(SETTINGS, 'strokeLinecap', {
+  label: 'stroke linecap',
+  options: {
+    butt: 'butt',
+    round: 'round',
+    square: 'square',
+  },
 });
 
 pane.addInput(SETTINGS, 'rotation1', {
@@ -214,6 +232,7 @@ function drawEverything() {
     rotationOffsets: [SETTINGS.rotationOffset1, SETTINGS.rotationOffset2],
     strokeLengths: [SETTINGS.strokeLength1, SETTINGS.strokeLength2],
     gradientStops: [SETTINGS.gradientStopStart, SETTINGS.gradientStopEnd],
+    strokeLinecap: SETTINGS.strokeLinecap as StrokeLinecap,
   });
 
   $logo.setAttribute('id', 'logo');

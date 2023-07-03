@@ -1,6 +1,7 @@
 // luma 0.0% - 100.0%, chroma 0.0 - 1.0 (0.4 being the practical border of the gamut), hue 0 - 360
 export type Color = [number, number, number];
 export type ColorsOKLCH = Color[];
+export type StrokeLinecap = 'butt' | 'round' | 'square';
 
 // these are de Dfinity brand colors adapted in the OKLCH color space
 // to make use of the full gamut of colors a given display has to offer
@@ -42,6 +43,7 @@ export type generateLogoOptions = {
   idPrefix?:string,
   logoClass?:string,
   gradientStops?:number[],
+  strokeLinecap?:StrokeLinecap,
 }
 
 function rect (x:number, y:number, width:number, height:number, fill:string) {
@@ -72,11 +74,12 @@ function maskCircle (
   strokeWidth:number, 
   strokeOffsetPercentage:number,
   strokeLengthPercentage:number,
+  strokeLinecap?:StrokeLinecap,
 ) {
   const circumference = 2 * Math.PI * r;
   // since the linecap is set to round we need to shorten the stroke dash half the stroke width
   // otherwise the stroke will be cut off
-  const lineCapRadius = strokeWidth / 2;
+  const lineCapRadius = strokeLinecap !== 'butt' ? strokeWidth / 2 : 0;
   const offset = circumference * strokeOffsetPercentage + lineCapRadius;
   const strokeDash = Math.max(
     (circumference * strokeLengthPercentage) - (lineCapRadius * 2),
@@ -84,7 +87,7 @@ function maskCircle (
   );
   const $circle = circle(cx, cy, r, 'none');
 
-  $circle.setAttribute("stroke-linecap", 'round');
+  $circle.setAttribute("stroke-linecap", strokeLinecap || 'round');
   $circle.setAttribute("stroke", '#fff');
   $circle.setAttribute("stroke-width", `${strokeWidth}`);
 
@@ -112,6 +115,7 @@ export const generateLogo = ({
   idPrefix = `logo-0`,       // prefix for the ids of the elements so they can be styled more than once on a page 
   logoClass = `logo`,        // class name for the logo
   gradientStops = [.2, .8], // stops percents for the gradients
+  strokeLinecap = 'round',  // stroke linecap
 }: generateLogoOptions) => {
   const $svg = document.createElementNS(NS, "svg");
 
@@ -176,6 +180,7 @@ export const generateLogo = ({
       ringStrokeWidth,
       0,
       strokeLengths[i],
+      strokeLinecap,
     );
 
     const $mask = document.createElementNS(NS, "mask");
