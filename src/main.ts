@@ -31,6 +31,8 @@ function reroll () {
     visualDebug: false,
     animationDuration: 1000,
     easingFunction: 'easeInOutQuad',
+
+    fontFamily: 'strawfordbold',
   };
   return { colors, SETTINGS };
 }
@@ -148,11 +150,19 @@ function drawEverything() {
     <div>
       <h1>Logo Master</h1>
       <div class="logo logo--main">${$logo.outerHTML}</div>
-      <h2>Logo Inline</h2>
+     
       <div class="logo logo--line">
+        <h2>Logo Inline</h2>
         <svg viewBox="0 0 2000 300">
           <use href="#logo" x="0" y="0" width="300" height="300" />
-          <text x="400" y="220" font-size="200" font-family="strawfordbold" fill="currentColor">Internet Identity</text>
+          <text x="400" y="220" font-size="200" font-family="${SETTINGS.fontFamily}" fill="currentColor">Internet Identity</text>
+        </svg>
+      </div>
+      <div class="logo logo--stacked">
+        <h2>Logo Stacked</h2>
+        <svg viewBox="0 0 300 500">
+          <use href="#logo" x="50" y="80" width="200" height="200" />
+          <text x="150" y="330" font-size="38" font-family="${SETTINGS.fontFamily}" dominant-baseline="middle" text-anchor="middle" fill="currentColor">Internet Identity</text>
         </svg>
       </div>
     </div>
@@ -250,5 +260,18 @@ pane.addButton({
   animateRotations();
 });
 
+
+pane.addInput(SETTINGS, 'fontFamily', {
+  label: 'font family',
+  options: {
+    'strawfordblack': 'strawfordblack',
+    'strawfordbold': 'strawfordbold',
+    'strawfordextralight': 'strawfordextralight',
+    'strawfordlight': 'strawfordlight',
+    'strawfordmedium': 'strawfordmedium',
+    'strawfordregular': 'strawfordregular',
+    'strawfordthin': 'strawfordthin',
+  },
+});
 
 drawEverything();
