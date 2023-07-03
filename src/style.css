@@ -135,15 +135,17 @@ body {
 svg {
   display: block;
   width: 100%;
+  margin-bottom: 10vw;
 }
 
 h1, h2, h3 {
   font-family: monospace;
   line-height: 1;
-    margin: 1em 0;
-   font-size: 2vmin;
-   font-weight: normal;
+  margin: 1em 0;
+  font-size: 2vmin;
+  font-weight: normal;
   max-width: 18ch;
+  display: none;
 }
 
 
