@@ -193,7 +193,10 @@ export const generateLogo = ({
 
   $svg.appendChild($innerCircle);
 
-  diameters.forEach((d, i) => {
+  const reversedDiameters = [...diameters].reverse();
+
+
+  const $gradientRects = diameters.map((d, i) => {
     const r = d / 2;
     const left = (viewBoxSize - d) / 2;
     const top = left;
@@ -205,8 +208,10 @@ export const generateLogo = ({
     $rect.setAttribute("data-layer", `${i + 1}`);
     $rect.style.setProperty("--rotation", `${rotations[i + 1]}`);
     $rect.setAttribute("mask", `url(#${idPrefix}-mask-${i})`);
-    $svg.appendChild($rect);
+    return $rect;
   });
+
+  $gradientRects.reverse().forEach(($rect) => $svg.appendChild($rect));
 
   return $svg;
 }
