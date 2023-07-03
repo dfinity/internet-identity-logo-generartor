@@ -66,14 +66,14 @@ pane.addInput(SETTINGS, 'innerPointRadius', {
   label: 'inner radius',
   min: 1,
   max: 100,
-  step: 1,
+  step: 0.01,
 });
 
 pane.addInput(SETTINGS, 'ringStrokeWidth', {
   label: 'stroke width',
   min: 1,
   max: 100,
-  step: 1,
+  step: 0.01,
 });
 
 pane.addInput(SETTINGS, 'rotation1', {
