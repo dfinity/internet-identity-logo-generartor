@@ -118,18 +118,6 @@ pane.addButton({
   pane.refresh();
 });
   
-
-/*
-
-const SETTINGS = {
-  innerPointRadius: 20,
-  ringStrokeWidth: 20,
-  rotation1: Math.random(),
-  rotation2: Math.random(),
-  rotation3: Math.random(),
-};
-*/
-
 const toOKlch = converter('oklch');
 
 let $logo: SVGElement | null = null;
@@ -152,12 +140,20 @@ function drawEverything() {
     ringStrokeWidth: SETTINGS.ringStrokeWidth,
     rotations: [SETTINGS.rotation1, SETTINGS.rotation2, SETTINGS.rotation3],
     strokeLengths: [SETTINGS.strokeLength1, SETTINGS.strokeLength2],
-  })
+  });
+
+  $logo.setAttribute('id', 'logo');
 
   document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <div>
       <h1>Internet Identity Logo Generator</h1>
       <div class="logo logo--main">${$logo.outerHTML}</div>
+      <div class="logo logo--line">
+        <svg viewBox="0 0 2000 200">
+          <use href="#logo" x="0" y="0" width="300" height="300" />
+          <text x="400" y="200" font-size="200" font-family="strawfordbold" fill="currentColor">Internet Identity</text>
+        </svg>
+      </div>
     </div>
   `
 }
