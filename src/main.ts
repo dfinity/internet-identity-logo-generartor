@@ -3,22 +3,27 @@ import { Pane } from 'tweakpane';
 import { generateLogo, brandColorsOKLCH, shuffle } from './logo.ts';
 import { formatHex, parse, converter } from 'culori';
 import anime from 'animejs/lib/anime.es.js';
-
+import * as Rand from 'random-seed';
+import {colorNameList} from 'color-name-list';
 
 function reroll () {
-  const colors = shuffle(brandColorsOKLCH);
+  const seed = colorNameList[Math.floor(Math.random() * colorNameList.length)].name;
+  const rand = Rand.create(seed);
+  const colors = shuffle(brandColorsOKLCH, rand.random);
   const colorsAsHex = colors.map((color) => formatHex({
     mode: 'oklch', l: color[0]/100, c: color[1], h: color[2]
   }));
+
   const SETTINGS = {
+    seed,
     innerPointRadius: 20,
     rings: 2,
     ringStrokeWidth: 20,
-    rotation1: Math.random(),
-    rotation2: Math.random(),
-    rotation3: Math.random(),
-    strokeLength1: 0.4 + Math.random() * 0.35,
-    strokeLength2: 0.2 + Math.random() * 0.2,
+    rotation1: rand.random(),
+    rotation2: rand.random(),
+    rotation3: rand.random(),
+    strokeLength1: 0.4 + rand.random() * 0.35,
+    strokeLength2: 0.2 + rand.random() * 0.2,
     
     outerRingColor1: colorsAsHex[0],
     outerRingColor2: colorsAsHex[1],
@@ -34,16 +39,24 @@ function reroll () {
 
     fontFamily: 'strawfordbold',
   };
-  return { colors, SETTINGS };
+  return { colors, SETTINGS, rand };
 }
 
-const { SETTINGS } = reroll();
+let { SETTINGS, rand } = reroll();
 
 const pane = new Pane({
   title: 'Logo Generator Settings',
 });
 
 pane.on('change', (ev) => {
+  drawEverything();
+});
+
+pane.addInput(SETTINGS, 'seed').on('change', (ev) => {
+  const seed = ev.value;
+  rand = Rand.create(seed);
+  const { SETTINGS: newSettings } = reroll();
+  Object.assign(SETTINGS, newSettings);
   drawEverything();
 });
 
