@@ -76,7 +76,10 @@ function maskCircle (
   // otherwise the stroke will be cut off
   const lineCapRadius = strokeWidth / 2;
   const offset = circumference * strokeOffsetPercentage + lineCapRadius;
-  const strokeDash = (circumference * strokeLengthPercentage) - (lineCapRadius * 2);
+  const strokeDash = Math.max(
+    (circumference * strokeLengthPercentage) - (lineCapRadius * 2),
+    0.1
+  );
   const $circle = circle(cx, cy, r, 'none');
 
   $circle.setAttribute("stroke-linecap", 'round');
