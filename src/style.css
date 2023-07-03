@@ -181,7 +181,7 @@ svg rect, svg circle{
 
 .visual-debug rect,
 .visual-debug circle {
-  transform: translateY(calc(var(--layer) * -7%)) rotateX(-45deg) rotate(calc(var(--rotation) * 360deg) + var(--rotationOffset, 1) * 360deg) !important ;
+  transform: translateY(calc(var(--layer) * -7%)) rotateX(-45deg) rotate(calc(var(--rotation) * 360deg + var(--rotationOffset, 1) * 360deg)) !important ;
 }
 
 .visual-debug rect:nth-child(1),
