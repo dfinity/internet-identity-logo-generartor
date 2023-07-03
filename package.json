@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "animejs": "^3.2.1",
-    "random-seedable": "^1.0.8",
     "tweakpane": "^3.1.10"
   }
 }
