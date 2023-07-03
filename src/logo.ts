@@ -139,8 +139,8 @@ export const generateLogo = ({
     $gradient.setAttribute("gradientTransform", `rotate(0)`);
     // set two random colors stops for each gradient
     $gradient.innerHTML = `
-      <stop offset="5%" stop-color="${colorOKLCHtoCSS(colors[i + 2 % colors.length])}"/>
-      <stop offset="95%" stop-color="${colorOKLCHtoCSS(colors[i + 2 % colors.length], 0)}"/>
+      <stop offset="5%" stop-color="${colorOKLCHtoCSS(colors[(i + 3) % colors.length])}"/>
+      <stop offset="95%" stop-color="${colorOKLCHtoCSS(colors[(i + 3) % colors.length], 0)}"/>
     `;
     $defs.appendChild($gradient);
   });
