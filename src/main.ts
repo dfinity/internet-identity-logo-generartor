@@ -156,14 +156,14 @@ function drawEverything() {
         <h2>Logo Inline</h2>
         <svg viewBox="0 0 2000 300">
           <use href="#logo" x="0" y="0" width="300" height="300" />
-          <text x="400" y="220" font-size="200" font-family="${SETTINGS.fontFamily}" fill="currentColor">Internet Identity</text>
+          <text x="400" y="220" font-size="200" font-family="${SETTINGS.fontFamily}" fill="currentColor">internet identity</text>
         </svg>
       </div>
       <div class="logo logo--stacked">
         <h2>Logo Stacked</h2>
         <svg viewBox="0 0 300 500">
           <use href="#logo" x="50" y="80" width="200" height="200" />
-          <text x="150" y="330" font-size="38" font-family="${SETTINGS.fontFamily}" dominant-baseline="middle" text-anchor="middle" fill="currentColor">Internet Identity</text>
+          <text x="150" y="330" font-size="38" font-family="${SETTINGS.fontFamily}" dominant-baseline="middle" text-anchor="middle" fill="currentColor">internet identity</text>
         </svg>
       </div>
     </div>
