@@ -160,6 +160,7 @@ export const generateLogo = ({
     );
 
     $rect.style.setProperty("--rotation", `${rotations[i + 1]}`);
+    $rect.setAttribute("data-layer", `${i + 1}`);
     $svg.appendChild($rect);
 
     const $maskCicle = maskCircle(
@@ -188,6 +189,8 @@ export const generateLogo = ({
 
   $innerCircle.style.setProperty("--rotation", `${rotations[0]}`)
 
+  $innerCircle.setAttribute("data-layer", `0`);
+
   $svg.appendChild($innerCircle);
 
   diameters.forEach((d, i) => {
@@ -199,6 +202,7 @@ export const generateLogo = ({
       d, d,
       `url(#${idPrefix}-gradient-${i})`
     );
+    $rect.setAttribute("data-layer", `${i + 1}`);
     $rect.style.setProperty("--rotation", `${rotations[i + 1]}`);
     $rect.setAttribute("mask", `url(#${idPrefix}-mask-${i})`);
     $svg.appendChild($rect);

@@ -142,6 +142,10 @@ h1 {
   margin: 0 0 1em;
 }
 
+svg rect, svg circle{
+  will-change: transform;
+}
+
 .visual-debug svg {
   overflow: visible;
   transform-style: preserve-3d;
