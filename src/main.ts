@@ -118,14 +118,6 @@ pane.addInput(SETTINGS, 'innerRingColor1');
 pane.addInput(SETTINGS, 'innerRingColor2');
 pane.addInput(SETTINGS, 'innerPointColor1');
 
-pane.addInput(SETTINGS, 'darkMode').on('change', (ev) => {
-  document.body.classList.toggle('is-dark', SETTINGS.darkMode);
-});
-
-pane.addInput(SETTINGS, 'visualDebug').on('change', (ev) => {
-  document.body.classList.toggle('visual-debug', SETTINGS.visualDebug);
-});
-
 pane.addButton({
   title: 'Reroll',
 }).on('click', (ev) => {
@@ -136,6 +128,8 @@ pane.addButton({
   drawEverything();
   pane.refresh();
 });
+
+pane.addSeparator();
   
 const toOKlch = converter('oklch');
 
@@ -276,6 +270,7 @@ pane.addButton({
   animateRotations();
 });
 
+pane.addSeparator();
 
 pane.addInput(SETTINGS, 'fontFamily', {
   label: 'font family',
@@ -288,6 +283,14 @@ pane.addInput(SETTINGS, 'fontFamily', {
     'strawfordregular': 'strawfordregular',
     'strawfordthin': 'strawfordthin',
   },
+});
+
+pane.addInput(SETTINGS, 'darkMode').on('change', (ev) => {
+  document.body.classList.toggle('is-dark', SETTINGS.darkMode);
+});
+
+pane.addInput(SETTINGS, 'visualDebug').on('change', (ev) => {
+  document.body.classList.toggle('visual-debug', SETTINGS.visualDebug);
 });
 
 drawEverything();
