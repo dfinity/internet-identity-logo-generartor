@@ -25,7 +25,7 @@ function reroll () {
     rotationOffset1: 0,
     rotationOffset2: 0,
     strokeLength1: 0.4 + rand.random() * 0.35,
-    strokeLength2: 0.2 + rand.random() * 0.2,
+    strokeLength2: 0.4 + rand.random() * 0.3,
     
     outerRingColor1: colorsAsHex[0],
     outerRingColor2: colorsAsHex[1],
