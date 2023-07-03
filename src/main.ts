@@ -35,9 +35,9 @@ function reroll () {
 
   const SETTINGS = {
     seed,
-    innerPointRadius: 20,
+    innerPointRadius: 15,
     rings: 2,
-    ringStrokeWidth: 20,
+    ringStrokeWidth: 15,
     rotation1: rand.random(),
     rotation2: rand.random(),
     rotation3: rand.random(),
@@ -84,8 +84,10 @@ pane.addInput(SETTINGS, 'seed').on('change', (ev) => {
   const newSettings = reroll().SETTINGS;
   newSettings.darkMode = SETTINGS.darkMode;
   newSettings.visualDebug = SETTINGS.visualDebug;
+  newSettings.seed = seed;
   Object.assign(SETTINGS, newSettings);
   drawEverything();
+  return false
 });
 
 pane.addInput(SETTINGS, 'innerPointRadius', {
