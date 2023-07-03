@@ -152,7 +152,6 @@ function drawEverything() {
     <div>
       <h1>Logo Master</h1>
       <div class="logo logo--main">${$logo.outerHTML}</div>
-     
       <div class="logo logo--line">
         <h2>Logo Inline</h2>
         <svg viewBox="0 0 2000 300">
