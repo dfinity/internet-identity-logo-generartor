@@ -55,8 +55,9 @@ pane.on('change', (ev) => {
 pane.addInput(SETTINGS, 'seed').on('change', (ev) => {
   const seed = ev.value;
   rand = Rand.create(seed);
-  const { SETTINGS: newSettings } = reroll();
-  Object.assign(SETTINGS, newSettings);
+  const newSettings = reroll().SETTINGS;
+  newSettings.darkMode = SETTINGS.darkMode;
+  newSettings.visualDebug = SETTINGS.visualDebug;
   drawEverything();
 });
 
