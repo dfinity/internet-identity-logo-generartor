@@ -4,11 +4,10 @@ import {
   generateLogo, 
   brandColorsRGBA, 
   shuffle,
-  ColorsRGBA,
   StrokeLinecap 
 } from './logo.ts';
 import anime from 'animejs/lib/anime.es.js';
-import { converter } from 'culori';
+import { converter, formatHex, formatHex8 } from 'culori';
 import * as Rand from 'random-seed';
 import colorNameList from 'color-name-list/dist/colornames.json';
 
@@ -137,7 +136,8 @@ function fixUpColor(color: string | RGBAcolorObject): RGBAcolorObject {
         r: rgbaColor.r * 255,
         g: rgbaColor.g * 255,
         b: rgbaColor.b * 255,
-        a: rgbaColor?.a && rgbaColor?.a !== 0 || 1,
+        //a: rgbaColor?.a && rgbaColor?.a !== 0 || 1,
+        a: 1,
       };
       return newColor;
     }
@@ -297,12 +297,22 @@ function drawEverything() {
     SETTINGS.outerRingColor1, SETTINGS.outerRingColor2,
     SETTINGS.innerRingColor1, SETTINGS.innerRingColor2,
     SETTINGS.innerPointColor1,
-  ];
+  ] as RGBAcolorObject[];
 
+  /*
   const colors:ColorsRGBA = colorArr.map((color) => {
     const {r, g, b, a} = color;
     return [r, g, b, a];
-  });
+  });*/
+
+  const colors = colorArr.map((color) => {
+    const {r, g, b, a} = color;
+    if (a < 1) {
+      return formatHex8(`rgba(${r}, ${g}, ${b}, ${a})`);
+    } else {
+      return formatHex(`rgb(${r}, ${g}, ${b})`);
+    }
+  }) as string[];
 
   $logo = generateLogo({
     colors,

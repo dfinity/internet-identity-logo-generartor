@@ -2,6 +2,7 @@
 export type Color = [number, number, number];
 export type ColorWithAlpha = [number, number, number, number];
 export type ColorsOKLCH = Color[];
+export type ColorsHex = string[];
 export type ColorsRGBA = ColorWithAlpha[];
 export type StrokeLinecap = 'butt' | 'round' | 'square';
 
@@ -35,20 +36,32 @@ export const shuffle = <T>(array:T[], random:() => number = Math.random) => {
   return arrayCopy;
 }
 
-// colorRGBtoString converts a color in the OKLCH color space to a CSS color string
-export const colorRGBtoString = (rgbaArr:ColorWithAlpha, alphaOverride = 1) => {
-  let rgbaArrFinal = [...rgbaArr];
-  if (alphaOverride !== 1) {
-    rgbaArrFinal[3] = alphaOverride;
+// formatColorToCSSString converts a color in the OKLCH color space to a CSS color string
+export const formatColorToCSSString = (color:ColorWithAlpha|string, alphaOverride = 1) => {
+  if (typeof color === 'string') {
+    let hex = color;
+    if (hex.length == 4) {
+      return hex;
+    } else if (hex.length == 7 && alphaOverride !== 1) {
+      hex = hex + Math.round(alphaOverride * 255).toString(16);
+    } else if (hex.length == 9 && alphaOverride) {
+      hex = hex.slice(0, 7) + Math.round(alphaOverride * 255).toString(16);
+    }
+    return hex;
+  } else {
+    let rgbaArrFinal = [...color];
+    if (alphaOverride !== 1) {
+      rgbaArrFinal[3] = alphaOverride;
+    }
+    return `rgba(${rgbaArrFinal.join(', ')})`
   }
-  return `rgba(${rgbaArrFinal.join(', ')})`
 };
 
 // svg namespace for element creation
 const NS = "http://www.w3.org/2000/svg";
 
 export type generateLogoOptions = {
-  colors?:ColorsRGBA,
+  colors?:ColorsRGBA|ColorsHex,
   innerPointRadius?:number,
   rings?:number,
   rotations?:number[],
@@ -168,8 +181,8 @@ export const generateLogo = ({
     $gradient.setAttribute("gradientUnits", `userSpaceOnUse`);
     // set two random colors stops for each gradient
     $gradient.innerHTML = `
-      <stop offset="${gradientStops[0] * 100}%" stop-color="${colorRGBtoString(colors[(i + 3) % colors.length])}"/>
-      <stop offset="${gradientStops[1] * 100}%" stop-color="${colorRGBtoString(colors[(i + 3) % colors.length], 0)}"/>
+      <stop offset="${gradientStops[0] * 100}%" stop-color="${formatColorToCSSString(colors[(i + 3) % colors.length])}"/>
+      <stop offset="${gradientStops[1] * 100}%" stop-opacity="0" stop-color="${formatColorToCSSString(colors[(i + 3) % colors.length])}"/>
     `;
     $defs.appendChild($gradient);
   });
@@ -185,7 +198,7 @@ export const generateLogo = ({
     const $rect = rect(
       left, top, 
       d, d, 
-      `${colorRGBtoString(colors[i + 1 % colors.length])}`
+      `${formatColorToCSSString(colors[i + 1 % colors.length])}`
     );
 
     $rect.style.setProperty("--rotation", `${rotations[i + 1]}`);
