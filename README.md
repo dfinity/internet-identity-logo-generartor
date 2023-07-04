@@ -22,5 +22,4 @@ The concept behind this generator is to incorporate the letters "i" and "D". The
 ## To Do
 
 - make color pairs
-- replace oklch with RGB or hex
 - make images savable (png & svg)

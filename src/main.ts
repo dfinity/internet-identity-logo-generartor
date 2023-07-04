@@ -2,17 +2,14 @@ import './style.css';
 import { Pane } from 'tweakpane';
 import { 
   generateLogo, 
-  brandColorsOKLCH, 
-  shuffle, 
-  ColorsOKLCH, 
+  brandColorsRGBA, 
+  shuffle,
+  ColorsRGBA,
   StrokeLinecap 
 } from './logo.ts';
-import { formatHex, parse, converter } from 'culori';
 import anime from 'animejs/lib/anime.es.js';
 import * as Rand from 'random-seed';
 import colorNameList from 'color-name-list/dist/colornames.json';
-
-const toOKlch = converter('oklch');
 
 // will hold the current logo svg element
 let $logo: SVGElement | null = null;
@@ -39,6 +36,13 @@ function updateFavicon ($svg: SVGElement) {
   $favicon.href = $canvas.toDataURL();
 }
 
+type RGBAcolorObject = {
+  r: number,
+  g: number,
+  b: number,
+  a: number,
+};
+
 type Settings = {
   seed: string,
   innerPointRadius: number,
@@ -52,11 +56,11 @@ type Settings = {
   strokeLength1: number,
   strokeLength2: number,
   strokeLinecap: StrokeLinecap,
-  outerRingColor1: string,
-  outerRingColor2: string,
-  innerRingColor1: string,
-  innerRingColor2: string,
-  innerPointColor1: string,
+  outerRingColor1: RGBAcolorObject,
+  outerRingColor2: RGBAcolorObject,
+  innerRingColor1: RGBAcolorObject,
+  innerRingColor2: RGBAcolorObject,
+  innerPointColor1: RGBAcolorObject,
   gradientStopStart: number,
   gradientStopEnd: number,
   darkMode: boolean,
@@ -71,10 +75,14 @@ type Settings = {
 function reroll (newSeed?:string) {
   const seed = newSeed || colorNameList[Math.floor(Math.random() * colorNameList.length)].name;
   const rand = Rand.create(seed);
-  const colors = shuffle(brandColorsOKLCH, rand.random);
-  const colorsAsHex = colors.map((color) => formatHex({
+  const colors = shuffle(brandColorsRGBA, rand.random);
+  /*const colorsAsHex = colors.map((color) => formatHex({
     mode: 'oklch', l: color[0]/100, c: color[1], h: color[2]
-  }));
+  }));*/
+  const colorsAsRGBA = colors.map((color) => {
+    const [ r, g, b, a ] = color;
+    return {r, g, b, a}
+  });
 
   const SETTINGS:Settings = {
     seed,
@@ -92,11 +100,11 @@ function reroll (newSeed?:string) {
     
     strokeLinecap: 'round',
 
-    outerRingColor1: colorsAsHex[0],
-    outerRingColor2: colorsAsHex[1],
-    innerRingColor1: colorsAsHex[2],
-    innerRingColor2: colorsAsHex[3],
-    innerPointColor1: colorsAsHex[4],
+    outerRingColor1: colorsAsRGBA[0],
+    outerRingColor2: colorsAsRGBA[1],
+    innerRingColor1: colorsAsRGBA[2],
+    innerRingColor2: colorsAsRGBA[3],
+    innerPointColor1: colorsAsRGBA[4],
 
     gradientStopStart: 0.2,
     gradientStopEnd: 0.8,
@@ -253,16 +261,15 @@ pane.addSeparator();
 
 
 function drawEverything() {
-  const colorsHex = [
+  const colorArr = [
     SETTINGS.outerRingColor1, SETTINGS.outerRingColor2,
     SETTINGS.innerRingColor1, SETTINGS.innerRingColor2,
     SETTINGS.innerPointColor1,
   ];
 
-  const colors:ColorsOKLCH = colorsHex.map((color) => {
-    const c = parse(color);
-    const lch = toOKlch(c);
-    return [(lch?.l || 0) * 100, lch?.c || 0, lch?.h || 0];
+  const colors:ColorsRGBA = colorArr.map((color) => {
+    const {r, g, b, a} = color;
+    return [r, g, b, a];
   });
 
   $logo = generateLogo({

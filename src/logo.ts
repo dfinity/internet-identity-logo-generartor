@@ -1,6 +1,8 @@
 // luma 0.0% - 100.0%, chroma 0.0 - 1.0 (0.4 being the practical border of the gamut), hue 0 - 360
 export type Color = [number, number, number];
+export type ColorWithAlpha = [number, number, number, number];
 export type ColorsOKLCH = Color[];
+export type ColorsRGBA = ColorWithAlpha[];
 export type StrokeLinecap = 'butt' | 'round' | 'square';
 
 // these are de Dfinity brand colors adapted in the OKLCH color space
@@ -15,6 +17,14 @@ export const brandColorsOKLCH:ColorsOKLCH = [
   [71.32, 0.182, 232.37],
 ];
 
+export const brandColorsRGBA:ColorsRGBA = [
+  [0, 178, 255, 1], // blue
+  [255, 0, 130, 1], // pink
+  [90, 0, 159, 1], // purple
+  [255, 171, 0, 1], // yellow
+  [255, 75, 0, 1], // orange
+]
+
 // function that returns a new shuffled array
 export const shuffle = <T>(array:T[], random:() => number = Math.random) => {
   const arrayCopy = [...array];
@@ -25,14 +35,20 @@ export const shuffle = <T>(array:T[], random:() => number = Math.random) => {
   return arrayCopy;
 }
 
-// colorOKLCHtoCSS converts a color in the OKLCH color space to a CSS color string
-export const colorOKLCHtoCSS = ([l, c, h]:Color, alpha = 1) => `oklch(${l}% ${c} ${h} ${alpha < 1 ? `/ ${alpha}` : ''})`;
+// colorRGBtoString converts a color in the OKLCH color space to a CSS color string
+export const colorRGBtoString = (rgbaArr:ColorWithAlpha, alphaOverride = 1) => {
+  let rgbaArrFinal = [...rgbaArr];
+  if (alphaOverride !== 1) {
+    rgbaArrFinal[3] = alphaOverride;
+  }
+  return `rgba(${rgbaArrFinal.join(', ')})`
+};
 
 // svg namespace for element creation
 const NS = "http://www.w3.org/2000/svg";
 
 export type generateLogoOptions = {
-  colors?:ColorsOKLCH,
+  colors?:ColorsRGBA,
   innerPointRadius?:number,
   rings?:number,
   rotations?:number[],
@@ -105,7 +121,7 @@ function maskCircle (
 
 // function that returns the generated logo SVG
 export const generateLogo = ({
-  colors = brandColorsOKLCH,     // all available colors in the OKLCH color space
+  colors = brandColorsRGBA,     // all available colors in the OKLCH color space
   innerPointRadius = 20, // radius of the inner point
   rings = 2,      // number of rings,
   rotations = new Array(2 + 1).fill(0).map((_) => Math.random()),
@@ -148,8 +164,8 @@ export const generateLogo = ({
     $gradient.setAttribute("gradientUnits", `userSpaceOnUse`);
     // set two random colors stops for each gradient
     $gradient.innerHTML = `
-      <stop offset="${gradientStops[0] * 100}%" stop-color="${colorOKLCHtoCSS(colors[(i + 3) % colors.length])}"/>
-      <stop offset="${gradientStops[1] * 100}%" stop-color="${colorOKLCHtoCSS(colors[(i + 3) % colors.length], 0)}"/>
+      <stop offset="${gradientStops[0] * 100}%" stop-color="${colorRGBtoString(colors[(i + 3) % colors.length])}"/>
+      <stop offset="${gradientStops[1] * 100}%" stop-color="${colorRGBtoString(colors[(i + 3) % colors.length], 0)}"/>
     `;
     $defs.appendChild($gradient);
   });
@@ -165,7 +181,7 @@ export const generateLogo = ({
     const $rect = rect(
       left, top, 
       d, d, 
-      `${colorOKLCHtoCSS(colors[i + 1 % colors.length])}`
+      `${colorRGBtoString(colors[i + 1 % colors.length])}`
     );
 
     $rect.style.setProperty("--rotation", `${rotations[i + 1]}`);
