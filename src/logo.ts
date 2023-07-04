@@ -135,6 +135,10 @@ export const generateLogo = ({
 }: generateLogoOptions) => {
   const $svg = document.createElementNS(NS, "svg");
 
+  // set all the standard attributes for the svg
+  $svg.setAttribute("xmlns", NS);
+  $svg.setAttribute("version", "1.1");
+
   const innerPointDiameter = innerPointRadius * 2;
   const viewBoxSize = rings * ringStrokeWidth + innerPointDiameter;
 

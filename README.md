@@ -22,4 +22,4 @@ The concept behind this generator is to incorporate the letters "i" and "D". The
 ## To Do
 
 - make color pairs
-- make images savable (png & svg)
+- make images savable (png & svg) // kinda done but svg does not work in figma yet

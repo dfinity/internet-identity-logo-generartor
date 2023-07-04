@@ -259,6 +259,9 @@ pane.addButton({
 
 pane.addSeparator();
 
+function svgToDataUri(svg: string) {
+  return `data:image/svg+xml;base64,${btoa(svg)}`;
+}
 
 function drawEverything() {
   const colorArr = [
@@ -289,7 +292,9 @@ function drawEverything() {
   document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <div>
       <h1>Logo Master</h1>
-      <div class="logo logo--main">${$logo.outerHTML}</div>
+      <a href="${svgToDataUri($logo.outerHTML)}" download="internet-identity-logo.svg"> 
+        <div class="logo logo--main">${$logo.outerHTML}</div>
+      </a>
       <div class="logo logo--line">
         <h2>Logo Inline</h2>
         <svg viewBox="0 0 2000 300">
