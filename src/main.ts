@@ -8,8 +8,11 @@ import {
   StrokeLinecap 
 } from './logo.ts';
 import anime from 'animejs/lib/anime.es.js';
+import { converter } from 'culori';
 import * as Rand from 'random-seed';
 import colorNameList from 'color-name-list/dist/colornames.json';
+
+const toRgb = converter('rgb');
 
 // will hold the current logo svg element
 let $logo: SVGElement | null = null;
@@ -56,11 +59,11 @@ type Settings = {
   strokeLength1: number,
   strokeLength2: number,
   strokeLinecap: StrokeLinecap,
-  outerRingColor1: RGBAcolorObject,
-  outerRingColor2: RGBAcolorObject,
-  innerRingColor1: RGBAcolorObject,
-  innerRingColor2: RGBAcolorObject,
-  innerPointColor1: RGBAcolorObject,
+  outerRingColor1: RGBAcolorObject | string,
+  outerRingColor2: RGBAcolorObject | string,
+  innerRingColor1: RGBAcolorObject | string,
+  innerRingColor2: RGBAcolorObject | string,
+  innerPointColor1: RGBAcolorObject | string,
   gradientStopStart: number,
   gradientStopEnd: number,
   darkMode: boolean,
@@ -69,7 +72,6 @@ type Settings = {
   easingFunction: string,
   fontFamily: string,
 }
-
 
 
 function reroll (newSeed?:string) {
@@ -126,11 +128,38 @@ const pane = new Pane({
   title: 'Logo Generator Settings',
 });
 
+function fixUpColor(color: string | RGBAcolorObject): RGBAcolorObject {
+  if (typeof color === 'string') {
+    let rgbaColor = toRgb(color);
+    if (rgbaColor) {
+      // multiply r g and b by 255 to get the correct values
+      let newColor: RGBAcolorObject = {
+        r: rgbaColor.r * 255,
+        g: rgbaColor.g * 255,
+        b: rgbaColor.b * 255,
+        a: rgbaColor?.a && rgbaColor?.a !== 0 || 1,
+      };
+      return newColor;
+    }
+  } else {
+    return color;
+  }
+  return {r: 1, g: 1, b: 1, a: 1};
+}
+
 // check the url for settings and apply them if they exist
 const url = new URL(window.location.href);
 const settingsString = url.searchParams.get('settings');
 if (settingsString) {
   const newSettings = JSON.parse(atob(settingsString)) as Settings;
+  
+  // fix up the colors
+  newSettings.outerRingColor1 = fixUpColor(newSettings.outerRingColor1);
+  newSettings.outerRingColor2 = fixUpColor(newSettings.outerRingColor2);
+  newSettings.innerRingColor1 = fixUpColor(newSettings.innerRingColor1);
+  newSettings.innerRingColor2 = fixUpColor(newSettings.innerRingColor2);
+  newSettings.innerPointColor1 = fixUpColor(newSettings.innerPointColor1);
+
   SETTINGS = newSettings;
   pane.importPreset(newSettings);
   drawEverything();
