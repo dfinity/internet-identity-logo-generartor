@@ -19,3 +19,8 @@ The concept behind this generator is to incorporate the letters "i" and "D". The
 <img width="211" alt="Screenshot 2023-06-20 at 13 08 34" src="https://github.com/dfinity/internet-identity-logo-generartor/assets/608386/ff337777-eb5c-42d8-8b17-4de43dfa9c5b">
 
 
+## To Do
+
+- make color pairs
+- replace oklch with RGB or hex
+- make images savable (png & svg)

@@ -12,6 +12,14 @@ import anime from 'animejs/lib/anime.es.js';
 import * as Rand from 'random-seed';
 import colorNameList from 'color-name-list/dist/colornames.json';
 
+const toOKlch = converter('oklch');
+
+// will hold the current logo svg element
+let $logo: SVGElement | null = null;
+
+// set a timer variable that will hold the setTimeout reference for the throttle
+let timer: number | null = null;
+
 function updateFavicon ($svg: SVGElement) {
   const $canvas = document.createElement('canvas');
   const ctx = $canvas.getContext('2d');
@@ -31,15 +39,44 @@ function updateFavicon ($svg: SVGElement) {
   $favicon.href = $canvas.toDataURL();
 }
 
-function reroll () {
-  const seed = colorNameList[Math.floor(Math.random() * colorNameList.length)].name;
+type Settings = {
+  seed: string,
+  innerPointRadius: number,
+  rings: number,
+  ringStrokeWidth: number,
+  rotation1: number,
+  rotation2: number,
+  rotation3: number,
+  rotationOffset1: number,
+  rotationOffset2: number,
+  strokeLength1: number,
+  strokeLength2: number,
+  strokeLinecap: StrokeLinecap,
+  outerRingColor1: string,
+  outerRingColor2: string,
+  innerRingColor1: string,
+  innerRingColor2: string,
+  innerPointColor1: string,
+  gradientStopStart: number,
+  gradientStopEnd: number,
+  darkMode: boolean,
+  visualDebug: boolean,
+  animationDuration: number,
+  easingFunction: string,
+  fontFamily: string,
+}
+
+
+
+function reroll (newSeed?:string) {
+  const seed = newSeed || colorNameList[Math.floor(Math.random() * colorNameList.length)].name;
   const rand = Rand.create(seed);
   const colors = shuffle(brandColorsOKLCH, rand.random);
   const colorsAsHex = colors.map((color) => formatHex({
     mode: 'oklch', l: color[0]/100, c: color[1], h: color[2]
   }));
 
-  const SETTINGS = {
+  const SETTINGS:Settings = {
     seed,
     innerPointRadius: 15,
     rings: 2,
@@ -70,30 +107,38 @@ function reroll () {
     animationDuration: 1000,
     easingFunction: 'easeInOutQuad',
 
-    fontFamily: 'strawfordbold',
+    fontFamily: 'strawfordmedium',
   };
   return { colors, SETTINGS, rand };
 }
 
-let { SETTINGS, rand } = reroll();
-
-rand.random();
+let SETTINGS: Settings;
 
 const pane = new Pane({
   title: 'Logo Generator Settings',
 });
+
+// check the url for settings and apply them if they exist
+const url = new URL(window.location.href);
+const settingsString = url.searchParams.get('settings');
+if (settingsString) {
+  const newSettings = JSON.parse(atob(settingsString)) as Settings;
+  SETTINGS = newSettings;
+  pane.importPreset(newSettings);
+  drawEverything();
+} else {
+  SETTINGS = reroll().SETTINGS;
+  drawEverything();
+}
 
 pane.on('change', () => {
   drawEverything();
 });
 
 pane.addInput(SETTINGS, 'seed').on('change', (ev) => {
-  const seed = ev.value;
-  rand = Rand.create(seed);
-  const newSettings = reroll().SETTINGS;
+  const newSettings = reroll(ev.value).SETTINGS;
   newSettings.darkMode = SETTINGS.darkMode;
   newSettings.visualDebug = SETTINGS.visualDebug;
-  newSettings.seed = seed;
   Object.assign(SETTINGS, newSettings);
   drawEverything();
   return false
@@ -205,10 +250,7 @@ pane.addButton({
 });
 
 pane.addSeparator();
-  
-const toOKlch = converter('oklch');
 
-let $logo: SVGElement | null = null;
 
 function drawEverything() {
   const colorsHex = [
@@ -258,7 +300,13 @@ function drawEverything() {
     </div>
   `;
 
-  updateFavicon($logo);
+  if (timer) {
+    clearTimeout(timer);
+  }
+  timer = setTimeout(() => {
+    updateFavicon($logo as SVGElement);
+    updateSettings();
+  }, 500);
 }
 
 type SvgInHtml = HTMLElement & SVGElement;
@@ -375,4 +423,18 @@ pane.addInput(SETTINGS, 'visualDebug').on('change', () => {
   document.body.classList.toggle('visual-debug', SETTINGS.visualDebug);
 });
 
-drawEverything();
+function updateSettings() {
+  const currentPreset = pane.exportPreset();
+
+  // change the url to reflect the current settings
+  const url = new URL(window.location.href);
+  url.searchParams.set('settings', btoa(JSON.stringify(currentPreset)));
+  window.history.replaceState({}, '', url.toString());
+}
+
+// restore last settings on command+z
+document.addEventListener('keydown', (e) => {
+  if (e.metaKey && e.key === 'z') {
+    window.history.back();
+  }
+});
