@@ -4,7 +4,10 @@ import {
   generateLogo, 
   brandColorsRGBA, 
   shuffle,
-  StrokeLinecap 
+  StrokeLinecap,
+  /*
+  brandColorsAsRGBAPairs,
+  brandColorsAsRGBAforCenter,*/
 } from './logo.ts';
 import anime from 'animejs/lib/anime.es.js';
 import { converter, formatHex, formatHex8 } from 'culori';
@@ -84,7 +87,6 @@ function reroll (newSeed?:string) {
     const [ r, g, b, a ] = color;
     return {r, g, b, a}
   });
-
   const SETTINGS:Settings = {
     seed,
     innerPointRadius: 15,
@@ -302,9 +304,9 @@ function svgToDataUri(svg: string) {
 
 function drawEverything() {
   const colorArr = [
+    SETTINGS.innerPointColor1,
     SETTINGS.outerRingColor1, SETTINGS.outerRingColor2,
     SETTINGS.innerRingColor1, SETTINGS.innerRingColor2,
-    SETTINGS.innerPointColor1,
   ] as RGBAcolorObject[];
 
   /*
@@ -313,17 +315,29 @@ function drawEverything() {
     return [r, g, b, a];
   });*/
 
-  const colors = colorArr.map((color) => {
-    const {r, g, b, a} = color;
-    if (a < 1) {
-      return formatHex8(`rgba(${r}, ${g}, ${b}, ${a})`);
-    } else {
-      return formatHex(`rgb(${r}, ${g}, ${b})`);
-    }
-  }) as string[];
+  const colorPairs = [
+    [colorArr[1], colorArr[2]],
+    [colorArr[3], colorArr[4]],
+  ] as RGBAcolorObject[][];
+
+  const innerPointColor = colorArr[0];
+
+  const innerColorHex = formatHex(`rgb(${innerPointColor.r}, ${innerPointColor.g}, ${innerPointColor.b})`);
+
+  const colors = colorPairs.map((pair) => {
+    return pair.map((color) => {
+      const {r, g, b, a} = color;
+      if (a < 1) {
+        return formatHex8(`rgba(${r}, ${g}, ${b}, ${a})`) || '#00000000';
+      } else {
+        return formatHex(`rgb(${r}, ${g}, ${b})`) || '#000000';
+      }
+    });
+  });
 
   $logo = generateLogo({
-    colors,
+    colorPairs: colors,
+    colorCenter: innerColorHex,
     innerPointRadius: SETTINGS.innerPointRadius,
     rings: SETTINGS.rings,
     ringStrokeWidth: SETTINGS.ringStrokeWidth,

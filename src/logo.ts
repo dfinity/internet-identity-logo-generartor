@@ -24,6 +24,40 @@ export const brandColorsRGBA:ColorsRGBA = [
   [90, 0, 159, 1], // purple
   [255, 171, 0, 1], // yellow
   [255, 75, 0, 1], // orange
+];
+
+export const brandColorsAsRGBAforCenter:ColorsRGBA = [
+  [0, 178, 255, 1], // blue
+  [255, 0, 130, 1], // pink
+  [90, 0, 159, 1], // purple
+  [255, 171, 0, 1], // yellow
+];
+
+export const brandColorsAsRGBAPairs:ColorsRGBA[] = [
+  [
+    [0, 178, 255, 1], // blue
+    [255, 0, 130, 1], // pink
+  ],
+  [
+    [90, 0, 159, 1], // purple
+    [0, 178, 255, 1], // blue
+  ],
+  [
+    [90, 0, 159, 1], // purple
+    [255, 0, 130, 1], // pink
+  ],
+  [
+    [255, 171, 0, 1], // yellow
+    [255, 75, 0, 1], // orange
+  ],
+  [
+    [255, 75, 0, 1], // orange
+    [255, 0, 130, 1], // pink
+  ],
+  [
+    [255, 171, 0, 1], // yellow
+    [90, 0, 159, 1], // purple
+  ],
 ]
 
 // function that returns a new shuffled array
@@ -61,7 +95,8 @@ export const formatColorToCSSString = (color:ColorWithAlpha|string, alphaOverrid
 const NS = "http://www.w3.org/2000/svg";
 
 export type generateLogoOptions = {
-  colors?:ColorsRGBA|ColorsHex,
+  colorPairs?:ColorsRGBA[]|ColorsHex[],
+  colorCenter?:ColorWithAlpha|string,
   innerPointRadius?:number,
   rings?:number,
   rotations?:number[],
@@ -134,7 +169,8 @@ function maskCircle (
 
 // function that returns the generated logo SVG
 export const generateLogo = ({
-  colors = brandColorsRGBA,     // all available colors in the OKLCH color space
+  colorPairs = brandColorsAsRGBAPairs,     // all available colors in the OKLCH color space
+  colorCenter = [255, 255, 255, 1], // color of the center point
   innerPointRadius = 20, // radius of the inner point
   rings = 2,      // number of rings,
   rotations = new Array(2 + 1).fill(0).map((_) => Math.random()),
@@ -175,15 +211,21 @@ export const generateLogo = ({
   // create gradients for the rings and the inner point
   const gradients = new Array(rings + 1).fill(0).map(() => document.createElementNS(NS, "linearGradient"));
 
+  const gradientColorPairs = [...colorPairs, [colorCenter, colorCenter]];
+  
   gradients.forEach(($gradient, i) => {
     $gradient.setAttribute("id", `${idPrefix}-gradient-${i}`);
     $gradient.setAttribute("gradientTransform", `rotate(0)`);
     $gradient.setAttribute("gradientUnits", `userSpaceOnUse`);
+    
+    const currentColorPair = gradientColorPairs[i % gradientColorPairs.length];
+
     // set two random colors stops for each gradient
     $gradient.innerHTML = `
-      <stop offset="${gradientStops[0] * 100}%" stop-color="${formatColorToCSSString(colors[(i + 3) % colors.length])}"/>
-      <stop offset="${gradientStops[1] * 100}%" stop-opacity="0" stop-color="${formatColorToCSSString(colors[(i + 3) % colors.length])}"/>
+      <stop offset="${gradientStops[0] * 100}%" stop-color="${formatColorToCSSString(currentColorPair[1])}"/>
+      <stop offset="${gradientStops[1] * 100}%" stop-opacity="0" stop-color="${formatColorToCSSString(currentColorPair[1])}"/>
     `;
+
     $defs.appendChild($gradient);
   });
   
@@ -198,7 +240,7 @@ export const generateLogo = ({
     const $rect = rect(
       left, top, 
       d, d, 
-      `${formatColorToCSSString(colors[i + 1 % colors.length])}`
+      `${formatColorToCSSString(colorPairs[i % colorPairs.length][0])}`
     );
 
     $rect.style.setProperty("--rotation", `${rotations[i + 1]}`);
