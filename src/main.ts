@@ -121,7 +121,7 @@ function reroll (newSeed?:string) {
   return { colors, SETTINGS, rand };
 }
 
-let SETTINGS: Settings;
+let SETTINGS: Settings = reroll().SETTINGS;
 
 const pane = new Pane({
   title: 'Logo Generator Settings',
@@ -148,25 +148,33 @@ function fixUpColor(color: string | RGBAcolorObject): RGBAcolorObject {
 }
 
 // check the url for settings and apply them if they exist
-const url = new URL(window.location.href);
-const settingsString = url.searchParams.get('settings');
-if (settingsString) {
-  const newSettings = JSON.parse(atob(settingsString)) as Settings;
-  
-  // fix up the colors
-  newSettings.outerRingColor1 = fixUpColor(newSettings.outerRingColor1);
-  newSettings.outerRingColor2 = fixUpColor(newSettings.outerRingColor2);
-  newSettings.innerRingColor1 = fixUpColor(newSettings.innerRingColor1);
-  newSettings.innerRingColor2 = fixUpColor(newSettings.innerRingColor2);
-  newSettings.innerPointColor1 = fixUpColor(newSettings.innerPointColor1);
+function restoreSettingsFromUrl () {
+  const url = new URL(window.location.href);
+  const settingsString = url.searchParams.get('settings');
 
-  SETTINGS = newSettings;
-  pane.importPreset(newSettings);
-  drawEverything();
-} else {
-  SETTINGS = reroll().SETTINGS;
-  drawEverything();
+  if (settingsString) {
+    const newSettings = JSON.parse(atob(settingsString)) as Settings;
+    
+    // fix up the colors
+    newSettings.outerRingColor1 = fixUpColor(newSettings.outerRingColor1);
+    newSettings.outerRingColor2 = fixUpColor(newSettings.outerRingColor2);
+    newSettings.innerRingColor1 = fixUpColor(newSettings.innerRingColor1);
+    newSettings.innerRingColor2 = fixUpColor(newSettings.innerRingColor2);
+    newSettings.innerPointColor1 = fixUpColor(newSettings.innerPointColor1);
+
+    SETTINGS = newSettings;
+    pane.importPreset(newSettings);
+    drawEverything();
+  } else {
+    SETTINGS = reroll().SETTINGS;
+    drawEverything();
+  }
 }
+
+restoreSettingsFromUrl();
+
+// on hisory back or forward, restore the settings from the url
+window.addEventListener('popstate', restoreSettingsFromUrl);
 
 pane.on('change', () => {
   drawEverything();
@@ -480,7 +488,8 @@ function updateSettings() {
   // change the url to reflect the current settings
   const url = new URL(window.location.href);
   url.searchParams.set('settings', btoa(JSON.stringify(currentPreset)));
-  window.history.replaceState({}, '', url.toString());
+  //window.history.replaceState({}, '', url.toString());
+  window.history.pushState({}, '', url.toString());
 }
 
 // restore last settings on command+z
