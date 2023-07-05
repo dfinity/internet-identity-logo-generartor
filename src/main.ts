@@ -5,9 +5,9 @@ import {
   brandColorsRGBA, 
   shuffle,
   StrokeLinecap,
-  /*
+  
   brandColorsAsRGBAPairs,
-  brandColorsAsRGBAforCenter,*/
+  brandColorsAsRGBAforCenter,
 } from './logo.ts';
 import anime from 'animejs/lib/anime.es.js';
 import { converter, formatHex, formatHex8 } from 'culori';
@@ -83,10 +83,33 @@ function reroll (newSeed?:string) {
   /*const colorsAsHex = colors.map((color) => formatHex({
     mode: 'oklch', l: color[0]/100, c: color[1], h: color[2]
   }));*/
+  const shuffeledColorsAsRGBAPairs = shuffle(brandColorsAsRGBAPairs, rand.random);
+  const flattenedColorsAsRGBAPairs = shuffeledColorsAsRGBAPairs.flat();
+  // remote all paris with a color already contained in an earlier pair
+  const previeousColors:string[] = [];
+  const colorsAsRGBAPairs = flattenedColorsAsRGBAPairs.filter((color) => {
+    const rgbaString = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`;
+    if (previeousColors.includes(rgbaString)) {
+      return false;
+    } else {
+      previeousColors.push(rgbaString);
+      return true;
+    }
+  });
+
+  // reform pairs from the flattened array
+  const colorsAsRGBAPairsReformed = [];
+  for (let i = 0; i < colorsAsRGBAPairs.length; i += 2) {
+    colorsAsRGBAPairsReformed.push([colorsAsRGBAPairs[i], colorsAsRGBAPairs[i+1]]);
+  }
+
   const colorsAsRGBA = colors.map((color) => {
     const [ r, g, b, a ] = color;
     return {r, g, b, a}
   });
+  const centerColor = shuffle(brandColorsAsRGBAforCenter, rand.random)[0];
+  const centerColorAsRGBA = {r: centerColor[0], g: centerColor[1], b: centerColor[2], a: centerColor[3]};
+
   const SETTINGS:Settings = {
     seed,
     innerPointRadius: 15,
@@ -107,7 +130,7 @@ function reroll (newSeed?:string) {
     outerRingColor2: colorsAsRGBA[1],
     innerRingColor1: colorsAsRGBA[2],
     innerRingColor2: colorsAsRGBA[3],
-    innerPointColor1: colorsAsRGBA[4],
+    innerPointColor1: centerColorAsRGBA,
 
     gradientStopStart: 0.2,
     gradientStopEnd: 0.8,
