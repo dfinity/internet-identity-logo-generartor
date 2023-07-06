@@ -388,9 +388,9 @@ function drawEverything() {
       </div>
       <div class="logo logo--stacked">
         <h2>Logo Stacked</h2>
-        <svg viewBox="0 0 300 500">
-          <use href="#logo" x="50" y="80" width="200" height="200" />
-          <text x="150" y="330" font-size="38" font-family="${SETTINGS.fontFamily}" dominant-baseline="middle" text-anchor="middle" fill="currentColor">internet identity</text>
+        <svg viewBox="0 0 300 280">
+          <use href="#logo" x="50" y="0" width="200" height="200" />
+          <text x="150" y="250" font-size="38" font-family="${SETTINGS.fontFamily}" dominant-baseline="middle" text-anchor="middle" fill="currentColor">internet identity</text>
         </svg>
       </div>
     </div>

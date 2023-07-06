@@ -192,6 +192,7 @@ export const generateLogo = ({
   const viewBoxSize = rings * ringStrokeWidth + innerPointDiameter;
 
   $svg.setAttribute("viewBox", `0 0 ${viewBoxSize} ${viewBoxSize}`);
+
   $svg.classList.add(logoClass);
 
   const $defs = document.createElementNS(NS, "defs"); // contains the gradients & masks
