@@ -2,10 +2,9 @@ import './style.css';
 import { Pane } from 'tweakpane';
 import { 
   generateLogo, 
-  brandColorsRGBA, 
   shuffle,
   StrokeLinecap,
-  
+  randomUniqueColorPairs,
   brandColorsAsRGBAPairs,
   brandColorsAsRGBAforCenter,
 } from './logo.ts';
@@ -18,6 +17,7 @@ const toRgb = converter('rgb');
 
 // will hold the current logo svg element
 let $logo: SVGElement | null = null;
+
 
 // set a timer variable that will hold the setTimeout reference for the throttle
 let timer: number | null = null;
@@ -73,39 +73,23 @@ type Settings = {
   animationDuration: number,
   easingFunction: string,
   fontFamily: string,
+  showDesignRules: boolean,
 }
 
 
 function reroll (newSeed?:string) {
   const seed = newSeed || colorNameList[Math.floor(Math.random() * colorNameList.length)].name;
   const rand = Rand.create(seed);
-  const colors = shuffle(brandColorsRGBA, rand.random);
   /*const colorsAsHex = colors.map((color) => formatHex({
     mode: 'oklch', l: color[0]/100, c: color[1], h: color[2]
   }));*/
-  const shuffeledColorsAsRGBAPairs = shuffle(brandColorsAsRGBAPairs, rand.random);
-  const flattenedColorsAsRGBAPairs = shuffeledColorsAsRGBAPairs.flat();
-  // remote all paris with a color already contained in an earlier pair
-  const previeousColors:string[] = [];
-  const colorsAsRGBAPairs = flattenedColorsAsRGBAPairs.filter((color) => {
-    const rgbaString = `rgba(${color[0]}, ${color[1]}, ${color[2]}, ${color[3]})`;
-    if (previeousColors.includes(rgbaString)) {
-      return false;
-    } else {
-      previeousColors.push(rgbaString);
-      return true;
-    }
-  });
+  const shuffeledColorsAsRGBAPairs = randomUniqueColorPairs(brandColorsAsRGBAPairs, rand.random);
 
-  // reform pairs from the flattened array
-  const colorsAsRGBAPairsReformed = [];
-  for (let i = 0; i < colorsAsRGBAPairs.length; i += 2) {
-    colorsAsRGBAPairsReformed.push([colorsAsRGBAPairs[i], colorsAsRGBAPairs[i+1]]);
-  }
-
-  const colorsAsRGBA = colors.map((color) => {
-    const [ r, g, b, a ] = color;
-    return {r, g, b, a}
+  const shuffeledColorsAsRGBAPairsObj = shuffeledColorsAsRGBAPairs.map((colorPair) => {
+    return colorPair.map((color) => {
+      const [ r, g, b, a ] = color;
+      return {r, g, b, a}
+    })
   });
   const centerColor = shuffle(brandColorsAsRGBAforCenter, rand.random)[0];
   const centerColorAsRGBA = {r: centerColor[0], g: centerColor[1], b: centerColor[2], a: centerColor[3]};
@@ -126,10 +110,10 @@ function reroll (newSeed?:string) {
     
     strokeLinecap: 'round',
 
-    outerRingColor1: colorsAsRGBA[0],
-    outerRingColor2: colorsAsRGBA[1],
-    innerRingColor1: colorsAsRGBA[2],
-    innerRingColor2: colorsAsRGBA[3],
+    outerRingColor1: shuffeledColorsAsRGBAPairsObj[0][0],
+    outerRingColor2: shuffeledColorsAsRGBAPairsObj[0][1],
+    innerRingColor1: shuffeledColorsAsRGBAPairsObj[1][0],
+    innerRingColor2: shuffeledColorsAsRGBAPairsObj[1][1],
     innerPointColor1: centerColorAsRGBA,
 
     gradientStopStart: 0.2,
@@ -138,12 +122,15 @@ function reroll (newSeed?:string) {
     darkMode: false,
 
     visualDebug: false,
+    showDesignRules: false,
+
     animationDuration: 1000,
     easingFunction: 'easeInOutQuad',
 
     fontFamily: 'strawfordmedium',
   };
-  return { colors, SETTINGS, rand };
+
+  return { SETTINGS, rand };
 }
 
 let SETTINGS: Settings = reroll().SETTINGS;
@@ -179,7 +166,10 @@ function restoreSettingsFromUrl () {
 
   if (settingsString) {
     const newSettings = JSON.parse(atob(settingsString)) as Settings;
-    
+
+    // extend with eventual missing settings from the default settings
+    Object.assign(SETTINGS, newSettings);
+
     // fix up the colors
     newSettings.outerRingColor1 = fixUpColor(newSettings.outerRingColor1);
     newSettings.outerRingColor2 = fixUpColor(newSettings.outerRingColor2);
@@ -188,6 +178,7 @@ function restoreSettingsFromUrl () {
     newSettings.innerPointColor1 = fixUpColor(newSettings.innerPointColor1);
 
     SETTINGS = newSettings;
+
     pane.importPreset(newSettings);
     drawEverything();
   } else {
@@ -209,6 +200,7 @@ pane.addInput(SETTINGS, 'seed').on('change', (ev) => {
   const newSettings = reroll(ev.value).SETTINGS;
   newSettings.darkMode = SETTINGS.darkMode;
   newSettings.visualDebug = SETTINGS.visualDebug;
+  newSettings.showDesignRules = SETTINGS.showDesignRules;
   Object.assign(SETTINGS, newSettings);
   drawEverything();
   return false
@@ -314,6 +306,7 @@ pane.addButton({
   const newSettings = reroll().SETTINGS;
   newSettings.darkMode = SETTINGS.darkMode;
   newSettings.visualDebug = SETTINGS.visualDebug;
+  newSettings.showDesignRules = SETTINGS.showDesignRules;
   Object.assign(SETTINGS, newSettings);
   drawEverything();
   pane.refresh();
@@ -331,12 +324,6 @@ function drawEverything() {
     SETTINGS.outerRingColor1, SETTINGS.outerRingColor2,
     SETTINGS.innerRingColor1, SETTINGS.innerRingColor2,
   ] as RGBAcolorObject[];
-
-  /*
-  const colors:ColorsRGBA = colorArr.map((color) => {
-    const {r, g, b, a} = color;
-    return [r, g, b, a];
-  });*/
 
   const colorPairs = [
     [colorArr[1], colorArr[2]],
@@ -369,6 +356,7 @@ function drawEverything() {
     strokeLengths: [SETTINGS.strokeLength1, SETTINGS.strokeLength2],
     gradientStops: [SETTINGS.gradientStopStart, SETTINGS.gradientStopEnd],
     strokeLinecap: SETTINGS.strokeLinecap as StrokeLinecap,
+    showDesignRules: SETTINGS.showDesignRules,
   });
 
   $logo.setAttribute('id', 'logo');
@@ -393,6 +381,16 @@ function drawEverything() {
           <text x="150" y="250" font-size="38" font-family="${SETTINGS.fontFamily}" dominant-baseline="middle" text-anchor="middle" fill="currentColor">internet identity</text>
         </svg>
       </div>
+      <h2>Possible color pairs</h2>
+      <div class="colorPairs">
+        ${brandColorsAsRGBAPairs.map((pair) => {
+          return `
+            <div class="colorPair">
+              <div class="colorPair__color" style="--color: rgba(${pair.colors[0].join()});"></div>
+              <div class="colorPair__color" style="--color: rgba(${pair.colors[1].join()});"></div>
+            </div>
+          `;
+        }).join('')}
     </div>
   `;
 
@@ -510,6 +508,10 @@ pane.addInput(SETTINGS, 'fontFamily', {
     'strawfordthin': 'strawfordthin',
   },
 });
+
+pane.addInput(SETTINGS, 'showDesignRules', {
+  label: 'Design Rules',
+})
 
 pane.addInput(SETTINGS, 'darkMode').on('change', () => {
   document.body.classList.toggle('is-dark', SETTINGS.darkMode);

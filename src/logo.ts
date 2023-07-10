@@ -33,32 +33,74 @@ export const brandColorsAsRGBAforCenter:ColorsRGBA = [
   [255, 171, 0, 1], // yellow
 ];
 
-export const brandColorsAsRGBAPairs:ColorsRGBA[] = [
-  [
-    [0, 178, 255, 1], // blue
-    [255, 0, 130, 1], // pink
-  ],
-  [
-    [90, 0, 159, 1], // purple
-    [0, 178, 255, 1], // blue
-  ],
-  [
-    [90, 0, 159, 1], // purple
-    [255, 0, 130, 1], // pink
-  ],
-  [
-    [255, 171, 0, 1], // yellow
-    [255, 75, 0, 1], // orange
-  ],
-  [
-    [255, 75, 0, 1], // orange
-    [255, 0, 130, 1], // pink
-  ],
-  [
-    [255, 171, 0, 1], // yellow
-    [90, 0, 159, 1], // purple
-  ],
-]
+export type BrandColorsAsRGBAPairs = {
+  colorNames:string[],
+  colors:ColorsRGBA,
+}[];
+
+
+export const brandColorsAsRGBAPairs:BrandColorsAsRGBAPairs = [
+  {
+    colorNames: ['blue', 'pink'],
+    colors: [
+      [0, 178, 255, 1], // blue
+      [255, 0, 130, 1], // pink
+    ],
+  },
+  {
+    colorNames: ['purple', 'blue'],
+    colors: [
+      [90, 0, 159, 1], // purple
+      [0, 178, 255, 1], // blue
+    ]
+  },
+  {
+    colorNames: ['pink', 'purple'],
+    colors: [
+      [90, 0, 159, 1], // purple
+      [255, 0, 130, 1], // pink
+    ]
+  },
+  {
+    colorNames: ['yellow', 'orange'],
+    colors: [
+      [255, 171, 0, 1], // yellow
+      [255, 75, 0, 1], // orange
+    ]
+  },
+  {
+    colorNames: ['orange', 'yellow'],
+    colors: [
+      [255, 75, 0, 1], // orange
+      [255, 0, 130, 1], // pink
+    ]
+  },
+  {
+    colorNames: ['yellow', 'purple'],
+    colors: [
+      [255, 171, 0, 1], // yellow
+      [90, 0, 159, 1], // purple
+    ]
+  },
+];
+
+export const randomUniqueColorPairs = (colors: BrandColorsAsRGBAPairs, random:() => number = Math.random) => {
+  const shuffeledColors = shuffle(colors, random);
+  const colorNamesInUse:string[] = [];
+  return shuffeledColors.filter((colorPair) => {
+    const colorName = colorPair.colorNames[0];
+    const colorName2 = colorPair.colorNames[1];
+    if (colorNamesInUse.includes(colorName) || colorNamesInUse.includes(colorName2)) {
+      return false;
+    } else {
+      colorNamesInUse.push(colorName);
+      colorNamesInUse.push(colorName2);
+      return true;
+    }
+  }).map(pair => pair.colors);
+}
+
+
 
 // function that returns a new shuffled array
 export const shuffle = <T>(array:T[], random:() => number = Math.random) => {
@@ -108,6 +150,7 @@ export type generateLogoOptions = {
   logoClass?:string,
   gradientStops?:number[],
   strokeLinecap?:StrokeLinecap,
+  showDesignRules?:boolean,
 }
 
 function rect (x:number, y:number, width:number, height:number, fill:string) {
@@ -169,7 +212,7 @@ function maskCircle (
 
 // function that returns the generated logo SVG
 export const generateLogo = ({
-  colorPairs = brandColorsAsRGBAPairs,     // all available colors in the OKLCH color space
+  colorPairs = brandColorsAsRGBAPairs.map(c => c.colors),     // all available colors in the OKLCH color space
   colorCenter = [255, 255, 255, 1], // color of the center point
   innerPointRadius = 20, // radius of the inner point
   rings = 2,      // number of rings,
@@ -181,6 +224,7 @@ export const generateLogo = ({
   logoClass = `logo`,        // class name for the logo
   gradientStops = [.2, .8], // stops percents for the gradients
   strokeLinecap = 'round',  // stroke linecap
+  showDesignRules = false,  // show design rules
 }: generateLogoOptions) => {
   const $svg = document.createElementNS(NS, "svg");
 
@@ -295,6 +339,142 @@ export const generateLogo = ({
   });
 
   $gradientRects.reverse().forEach(($rect) => $svg.appendChild($rect));
+
+  // show design reules
+  if (showDesignRules) {
+    const $designRules = document.createElementNS(NS, "g");
+    $designRules.setAttribute("class", "design-rules");
+
+    const $designRulesTop = document.createElementNS(NS, "g");
+    $designRules.setAttribute("class", "design-rules");
+
+
+    // for each ring show a little line that indicates the stroke width
+    diameters.forEach((d, i) => {
+      const r = d / 2;
+      
+      const lineWidth = ringStrokeWidth;
+
+      let left = (viewBoxSize - d) / 2;
+      // position every second line on the right side
+      if (i % 2 === 1) {
+        left += d - lineWidth;
+      }
+      
+      const top = viewBoxSize / 2;
+      
+      const $line = document.createElementNS(NS, "line");
+      
+      $line.setAttribute("x1", `${left}`);
+      $line.setAttribute("y1", `${top}`);
+      $line.setAttribute("x2", `${left + lineWidth}`);
+      $line.setAttribute("y2", `${top}`);
+
+      $line.setAttribute("stroke", "currentColor");
+      $line.setAttribute("stroke-width", `${viewBoxSize / 800}`);
+
+      // add outline ring for each ring
+      const $outline = circle(
+        viewBoxSize / 2,
+        viewBoxSize / 2,
+        r,
+        "none",
+      );
+      $outline.setAttribute("stroke", "currentColor");
+      $outline.setAttribute("stroke-width", `${viewBoxSize / 800}`);
+
+      const $label = document.createElementNS(NS, "text");
+      $label.setAttribute("x", `${left + ringStrokeWidth / 2}`);
+      $label.setAttribute("y", `${viewBoxSize - ringStrokeWidth / 8}`);
+      $label.setAttribute("text-anchor", "middle");
+      $label.setAttribute("dominant-baseline", "middle");
+      $label.setAttribute("font-size", `${viewBoxSize / 20}`);
+      $label.setAttribute("fill", "currentColor");
+      $label.innerHTML = `1x`;
+
+      // draw a line that goes from the line to the bottom of the svg
+      const $line2 = document.createElementNS(NS, "line");
+      $line2.setAttribute("x1", `${left + lineWidth}`);
+      $line2.setAttribute("y1", `${top}`);
+      $line2.setAttribute("x2", `${left + lineWidth}`);
+      $line2.setAttribute("y2", `${viewBoxSize}`);
+      $line2.setAttribute("stroke", "currentColor");
+      $line2.setAttribute("stroke-width", `${viewBoxSize / 800}`);
+
+      const $line3 = document.createElementNS(NS, "line");
+      $line3.setAttribute("x1", `${left + lineWidth - lineWidth}`);
+      $line3.setAttribute("y1", `${top}`);
+      $line3.setAttribute("x2", `${left + lineWidth - lineWidth}`);
+      $line3.setAttribute("y2", `${viewBoxSize}`);
+      $line3.setAttribute("stroke", "currentColor");
+      $line3.setAttribute("stroke-width", `${viewBoxSize / 800}`);
+
+
+      $designRules.appendChild($outline);
+      $designRulesTop.appendChild($line);
+      $designRulesTop.appendChild($line2);
+      $designRulesTop.appendChild($line3);
+      $designRulesTop.appendChild($label);
+    });
+
+    // add outline for inner point
+    const $outline = circle(
+      viewBoxSize / 2,
+      viewBoxSize / 2,
+      innerPointRadius,
+      "none",
+    );
+    $outline.setAttribute("stroke", "currentColor");
+    $outline.setAttribute("stroke-width", `${viewBoxSize / 800}`);
+
+    // add outline for the most inner diameter
+    const $outline2 = circle(
+      viewBoxSize / 2,
+      viewBoxSize / 2,
+      innerPointRadius - ringStrokeWidth / 2,
+      "none",
+    );
+    $outline2.setAttribute("stroke", "currentColor");
+    $outline2.setAttribute("stroke-width", `${viewBoxSize / 800}`);
+
+    // add a vertical line that shows the inner point diameter
+    const $line = document.createElementNS(NS, "line");
+    $line.setAttribute("x1", `${viewBoxSize / 2}`);
+    $line.setAttribute("y1", `${viewBoxSize / 2 - innerPointRadius}`);
+    $line.setAttribute("x2", `${viewBoxSize / 2}`);
+    $line.setAttribute("y2", `${viewBoxSize / 2 + innerPointRadius}`);
+    $line.setAttribute("stroke", "currentColor");
+    $line.setAttribute("stroke-width", `${viewBoxSize / 800}`);
+
+    // add label for inner point diameter
+    const $label = document.createElementNS(NS, "text");
+    $label.setAttribute("x", `${viewBoxSize / 2}`);
+    $label.setAttribute("y", `${viewBoxSize / 2}`);
+    $label.setAttribute("text-anchor", "middle");
+    $label.setAttribute("dominant-baseline", "middle");
+    $label.setAttribute("font-size", `${viewBoxSize  / 20}`);
+    $label.setAttribute("fill", "currentColor");
+    $label.innerHTML = `${Math.round(innerPointRadius * 2 / ringStrokeWidth * 10) / 10}x`;
+
+    // add a circle that shows the inner point diameter
+    const $arc = document.createElementNS(NS, "circle");
+    $arc.setAttribute("cx", `${viewBoxSize / 2}`);
+    $arc.setAttribute("cy", `${viewBoxSize / 2}`);
+    $arc.setAttribute("r", `${innerPointRadius}`);
+    $arc.setAttribute("fill", "none");
+    $arc.setAttribute("stroke", "currentColor");
+    $arc.setAttribute("stroke-width", `${viewBoxSize / 800}`);
+
+    $designRules.appendChild($line);
+    $designRulesTop.appendChild($label);
+
+    $designRulesTop.appendChild($arc);
+
+    $svg.prepend($outline);
+    $svg.prepend($designRules);
+    $svg.prepend($outline2);
+    $svg.appendChild($designRulesTop);
+  }
 
   return $svg;
 }
