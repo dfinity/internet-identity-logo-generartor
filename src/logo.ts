@@ -55,7 +55,7 @@ export const brandColorsAsRGBAPairs:BrandColorsAsRGBAPairs = [
     ]
   },
   {
-    colorNames: ['pink', 'purple'],
+    colorNames: ['purple', 'pink'],
     colors: [
       [90, 0, 159, 1], // purple
       [255, 0, 130, 1], // pink
@@ -69,7 +69,7 @@ export const brandColorsAsRGBAPairs:BrandColorsAsRGBAPairs = [
     ]
   },
   {
-    colorNames: ['orange', 'yellow'],
+    colorNames: ['orange', 'pink'],
     colors: [
       [255, 75, 0, 1], // orange
       [255, 0, 130, 1], // pink
