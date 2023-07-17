@@ -1,3 +1,11 @@
+/**
+ * TODO:
+[ ] Angle starting but corrct angle and length
+[ ] never more than 180deg
+[x] outer 0.5- 0.666
+[x] inner: .333 - .666
+ */
+
 import './style.css';
 import { Pane } from 'tweakpane';
 import { 
@@ -58,8 +66,8 @@ type Settings = {
   rotation3: number,
   rotationOffset1: number,
   rotationOffset2: number,
-  strokeLength1: number,
-  strokeLength2: number,
+  strokeLengthOuter: number,
+  strokeLengthInner: number,
   strokeLinecap: StrokeLinecap,
   outerRingColor1: RGBAcolorObject | string,
   outerRingColor2: RGBAcolorObject | string,
@@ -105,8 +113,8 @@ function reroll (newSeed?:string) {
     rotationOffset1: 0,
     rotationOffset2: 0,
 
-    strokeLength1: 0.4 + rand.random() * 0.35,
-    strokeLength2: 0.4 + rand.random() * 0.3,
+    strokeLengthOuter: 0.5 + rand.random() * 0.16,
+    strokeLengthInner: 0.333 + rand.random() * 0.333,
     
     strokeLinecap: 'round',
 
@@ -250,14 +258,14 @@ pane.addInput(SETTINGS, 'rotation3', {
   step: 0.001,
 });
 
-pane.addInput(SETTINGS, 'strokeLength1', {
+pane.addInput(SETTINGS, 'strokeLengthOuter', {
   label: 'outer length',
   min: .01,
   max: 1,
   step: 0.001,
 });
 
-pane.addInput(SETTINGS, 'strokeLength2', {
+pane.addInput(SETTINGS, 'strokeLengthInner', {
   label: 'inner length',
   min: .01,
   max: 1,
@@ -353,7 +361,7 @@ function drawEverything() {
     ringStrokeWidth: SETTINGS.ringStrokeWidth,
     rotations: [SETTINGS.rotation1, SETTINGS.rotation2, SETTINGS.rotation3],
     rotationOffsets: [SETTINGS.rotationOffset1, SETTINGS.rotationOffset2],
-    strokeLengths: [SETTINGS.strokeLength1, SETTINGS.strokeLength2],
+    strokeLengths: [SETTINGS.strokeLengthOuter, SETTINGS.strokeLengthInner],
     gradientStops: [SETTINGS.gradientStopStart, SETTINGS.gradientStopEnd],
     strokeLinecap: SETTINGS.strokeLinecap as StrokeLinecap,
     showDesignRules: SETTINGS.showDesignRules,
