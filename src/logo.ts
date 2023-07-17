@@ -272,7 +272,6 @@ export const generateLogo = ({
     if (strokeLengths[i]) {
       gradientAngle = 180 + (calculateAngleForArc(strokeLengths[i] * 2 * Math.PI * r, r) / 2) + 90;
     }
-    console.log(gradientAngle)
     $gradient.setAttribute("gradientTransform", `rotate(${gradientAngle} .5 .5)`);
     $gradient.setAttribute("gradientUnits", `objectBoundingBox`); // userSpaceOnUse
     
