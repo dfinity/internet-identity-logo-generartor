@@ -1,11 +1,3 @@
-/**
- * TODO:
-[ ] Angle starting but corrct angle and length
-[ ] never more than 180deg
-[x] outer 0.5- 0.666
-[x] inner: .333 - .666
- */
-
 import './style.css';
 import { Pane } from 'tweakpane';
 import { 
@@ -124,8 +116,8 @@ function reroll (newSeed?:string) {
     innerRingColor2: shuffeledColorsAsRGBAPairsObj[1][1],
     innerPointColor1: centerColorAsRGBA,
 
-    gradientStopStart: 0.2,
-    gradientStopEnd: 0.8,
+    gradientStopStart: 0.25,
+    gradientStopEnd: 0.75,
 
     darkMode: false,
 

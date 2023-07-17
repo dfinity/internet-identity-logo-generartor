@@ -210,6 +210,10 @@ function maskCircle (
   return $circle;
 }
 
+const calculateAngleForArc = (arcLength: number, radius: number) => {
+  return (arcLength / radius) * (180 / Math.PI);
+}
+
 // function that returns the generated logo SVG
 export const generateLogo = ({
   colorPairs = brandColorsAsRGBAPairs.map(c => c.colors),     // all available colors in the OKLCH color space
@@ -246,12 +250,15 @@ export const generateLogo = ({
   $svg.appendChild($defs);
 
   $style.innerHTML = `
-    .${logoClass} .shape {
+    .${logoClass} .shape{
       transform-box: fill-box;
       transform-origin: center;
       transform: rotate(calc(var(--rotation) * 360deg + var(--rotationOffset, 1) * 360deg));
     }
   `;
+
+
+  const diameters = new Array(rings).fill(0).map((_, i) => viewBoxSize - i * ringStrokeWidth);
 
   // create gradients for the rings and the inner point
   const gradients = new Array(rings + 1).fill(0).map(() => document.createElementNS(NS, "linearGradient"));
@@ -260,8 +267,14 @@ export const generateLogo = ({
   
   gradients.forEach(($gradient, i) => {
     $gradient.setAttribute("id", `${idPrefix}-gradient-${i}`);
-    $gradient.setAttribute("gradientTransform", `rotate(0)`);
-    $gradient.setAttribute("gradientUnits", `userSpaceOnUse`);
+    const r = diameters[i] / 2;
+    let gradientAngle = 0;
+    if (strokeLengths[i]) {
+      gradientAngle = 180 + (calculateAngleForArc(strokeLengths[i] * 2 * Math.PI * r, r) / 2) + 90;
+    }
+    console.log(gradientAngle)
+    $gradient.setAttribute("gradientTransform", `rotate(${gradientAngle} .5 .5)`);
+    $gradient.setAttribute("gradientUnits", `objectBoundingBox`); // userSpaceOnUse
     
     const currentColorPair = gradientColorPairs[i % gradientColorPairs.length];
 
@@ -271,10 +284,11 @@ export const generateLogo = ({
       <stop offset="${gradientStops[1] * 100}%" stop-opacity="0" stop-color="${formatColorToCSSString(currentColorPair[1])}"/>
     `;
 
+    $gradient.classList.add('gradient');
+
     $defs.appendChild($gradient);
   });
   
-  const diameters = new Array(rings).fill(0).map((_, i) => viewBoxSize - i * ringStrokeWidth);
 
   // appends a rect for each ring to the svg
   // and creates a mask for each ring
