@@ -269,6 +269,7 @@ export const generateLogo = ({
     $gradient.setAttribute("id", `${idPrefix}-gradient-${i}`);
     const r = diameters[i] / 2;
     let gradientAngle = 0;
+    let isInnerPoint = i === rings;
     if (strokeLengths[i]) {
       gradientAngle = 180 + (calculateAngleForArc(strokeLengths[i] * 2 * Math.PI * r, r) / 2) + 90;
     }
@@ -279,8 +280,8 @@ export const generateLogo = ({
 
     // set two random colors stops for each gradient
     $gradient.innerHTML = `
-      <stop offset="${gradientStops[0] * 100}%" stop-color="${formatColorToCSSString(currentColorPair[1])}"/>
-      <stop offset="${gradientStops[1] * 100}%" stop-opacity="0" stop-color="${formatColorToCSSString(currentColorPair[1])}"/>
+      <stop offset="${isInnerPoint ? 0 : gradientStops[0] * 100}%" stop-color="${formatColorToCSSString(currentColorPair[1])}"/>
+      <stop offset="${isInnerPoint ? 100 : gradientStops[1] * 100}%" stop-opacity="0" stop-color="${formatColorToCSSString(currentColorPair[1])}"/>
     `;
 
     $gradient.classList.add('gradient');

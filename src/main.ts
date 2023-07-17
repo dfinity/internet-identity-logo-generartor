@@ -94,19 +94,21 @@ function reroll (newSeed?:string) {
   const centerColor = shuffle(brandColorsAsRGBAforCenter, rand.random)[0];
   const centerColorAsRGBA = {r: centerColor[0], g: centerColor[1], b: centerColor[2], a: centerColor[3]};
 
+  let rotation = rand.random();
+
   const SETTINGS:Settings = {
     seed,
     innerPointRadius: 15,
     rings: 2,
     ringStrokeWidth: 15,
     rotation1: rand.random(),
-    rotation2: rand.random(),
-    rotation3: rand.random(),
+    rotation2: rotation,
+    rotation3: rotation + (-0.25 + rand.random() * 0.5),
     rotationOffset1: 0,
     rotationOffset2: 0,
 
     strokeLengthOuter: 0.5 + rand.random() * 0.16,
-    strokeLengthInner: 0.333 + rand.random() * 0.333,
+    strokeLengthInner: 0.45 + rand.random() * 0.30,
     
     strokeLinecap: 'round',
 
