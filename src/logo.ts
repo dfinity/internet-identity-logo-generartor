@@ -260,6 +260,9 @@ export const generateLogo = ({
 
   const diameters = new Array(rings).fill(0).map((_, i) => viewBoxSize - i * ringStrokeWidth);
 
+  // add white background inner circle
+  $svg.appendChild(circle(viewBoxSize / 2, viewBoxSize / 2, innerPointRadius, 'white'));
+
   // create gradients for the rings and the inner point
   const gradients = new Array(rings + 1).fill(0).map(() => document.createElementNS(NS, "linearGradient"));
 

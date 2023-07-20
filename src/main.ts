@@ -98,20 +98,21 @@ function reroll (newSeed?:string) {
   const centerColorAsRGBA = {r: centerColor[0], g: centerColor[1], b: centerColor[2], a: centerColor[3]};
 
   let rotation = rand.random();
+  let innserCricleLength = 0.45 + rand.random() * 0.30;
 
   const SETTINGS:Settings = {
     seed,
     innerPointRadius: 15,
     rings: 2,
     ringStrokeWidth: 15,
-    rotation1: rand.random(),
+    rotation1: ((rotation + innserCricleLength * .5) + (-0.1 + rand.random() * 0.2)) % 1, // rotate inner ring
     rotation2: rotation,
     rotation3: rotation + (-0.25 + rand.random() * 0.5),
     rotationOffset1: 0,
     rotationOffset2: 0,
 
     strokeLengthOuter: 0.5 + rand.random() * 0.16,
-    strokeLengthInner: 0.45 + rand.random() * 0.30,
+    strokeLengthInner: innserCricleLength,
     
     strokeLinecap: 'round',
 
