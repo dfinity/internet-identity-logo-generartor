@@ -74,6 +74,9 @@ type Settings = {
   easingFunction: string,
   fontFamily: string,
   showDesignRules: boolean,
+  cardBlur: number,
+  cardOverlayOpacity: number,
+  cardMixBlendMode: string,
 }
 
 
@@ -130,6 +133,10 @@ function reroll (newSeed?:string) {
     easingFunction: 'easeInOutQuad',
 
     fontFamily: 'strawfordmedium',
+
+    cardBlur: 20,
+    cardOverlayOpacity: 0.35,
+    cardMixBlendMode: 'color-dodge',
   };
 
   return { SETTINGS, rand };
@@ -369,6 +376,7 @@ function drawEverything() {
       <a href="${svgToDataUri($logo.outerHTML)}" download="internet-identity-logo.svg"> 
         <div class="logo logo--main">${$logo.outerHTML}</div>
       </a>
+      
       <div class="logo logo--line">
         <h2>Logo Inline</h2>
         <svg viewBox="0 0 2000 300">
@@ -376,6 +384,26 @@ function drawEverything() {
           <text x="400" y="220" font-size="200" font-family="${SETTINGS.fontFamily}" fill="currentColor">internet identity</text>
         </svg>
       </div>
+      
+      <div class="">
+        <h2>Logo Cards</h2>
+        <div class="c-card c-card--logo">
+          <svg viewBox="0 0 368 200">
+            <defs>
+              <filter id="logo-blur" x="0" y="0">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="${SETTINGS.cardBlur}" />
+              </filter>
+            </defs>
+            <use href="#logo" x="${(368 - 900 * 1.2) / 2}" y="${(200 - 900 * 1.2) / 2}" width="900" height="900" filter="url(#logo-blur)"/>
+            <use href="#logo" x="${(368 - 900 * 1.2) / 2}" y="${(200 - 900 * 1.2) / 2}" width="900" height="900" style="opacity: ${SETTINGS.cardOverlayOpacity}; mix-blend-mode: ${SETTINGS.cardMixBlendMode}"/>
+          </svg>
+          <strong class="c-card__anchor">
+            <b>internet identity</b>
+            ${Math.round( Math.random() * 1000000000)}
+          </strong>
+        </div>
+      </div>
+
       <div class="logo logo--stacked">
         <h2>Logo Stacked</h2>
         <svg viewBox="0 0 300 280">
@@ -521,6 +549,42 @@ pane.addInput(SETTINGS, 'darkMode').on('change', () => {
 
 pane.addInput(SETTINGS, 'visualDebug').on('change', () => {
   document.body.classList.toggle('visual-debug', SETTINGS.visualDebug);
+});
+
+
+pane.addInput(SETTINGS, 'cardBlur', {
+  label: 'Card blur',
+  min: 0,
+  max: 500,
+  step: 0.001,
+});
+
+pane.addInput(SETTINGS, 'cardOverlayOpacity', {
+  label: 'Card Overlay Opacity',
+  min: 0,
+  max: 1,
+  step: 0.001,
+});
+
+pane.addInput(SETTINGS, 'cardMixBlendMode', {
+  label: 'Card Mix Blend Mode',
+  options: {
+    'normal': 'normal',
+    'multiply': 'multiply',
+    'screen': 'screen',
+    'overlay': 'overlay',
+    'darken': 'darken',
+    'lighten': 'lighten',
+    'color-dodge': 'color-dodge',
+    'color-burn': 'color-burn',
+    'hard-light': 'hard-light',
+    'soft-light': 'soft-light',
+    'difference': 'difference',
+    'exclusion': 'exclusion',
+    'hue': 'hue',
+    'saturation': 'saturation',
+    'plus-lighter': 'plus-lighter',
+  }
 });
 
 function updateSettings() {

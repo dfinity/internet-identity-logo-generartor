@@ -27,7 +27,6 @@
     url('/font/strawford-bold-webfont.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
-
 }
 
 
@@ -239,4 +238,33 @@ svg rect, svg circle{
   width: 1rem;
   height: 1rem;
   background: var(--color);
+}
+
+.c-card--logo {
+  position: relative;
+  border-radius: 1rem;
+  background-color: #5a009f;
+  overflow: hidden;
+  margin-bottom: 10rem;
+
+}
+
+.c-card--logo svg {
+  margin-bottom: 0;
+}
+
+.c-card__anchor {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  color: #fff;
+  font-size: 5vw;
+  line-height: 1;
+}
+
+.c-card__anchor b {
+  font-size: .5em;
+  margin-bottom: .6ex;
+  display: block;
+  text-transform: capitalize;
 }
