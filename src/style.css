@@ -196,26 +196,31 @@ svg rect, svg circle{
 }
 .visual-debug rect:nth-child(2),
 .visual-debug circle:nth-child(2) {
-  --layer: -1;
+  --layer: -2;
 }
 
 .visual-debug rect:nth-child(3),
 .visual-debug circle:nth-child(3) {
-  --layer: 0;
+  --layer: -1;
 }
 
 .visual-debug rect:nth-child(4),
 .visual-debug circle:nth-child(4) {
-  --layer: 1;
+  --layer: 0;
 }
 
 .visual-debug rect:nth-child(5),
 .visual-debug circle:nth-child(5) {
-  --layer: 2;
+  --layer: 1;
 }
 
 .visual-debug rect:nth-child(6),
 .visual-debug circle:nth-child(6) {
+  --layer: 2;
+}
+
+.visual-debug rect:nth-child(7),
+.visual-debug circle:nth-child(7) {
   --layer: 3;
 }
 
