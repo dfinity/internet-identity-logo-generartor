@@ -389,7 +389,7 @@ function drawEverything() {
       <div class="">
         <h2>Logo Cards</h2>
         <div class="c-card c-card--logo">
-          <svg viewBox="0 0 368 200">
+          <svg viewBox="0 0 368 200" style="--bg: transparent;">
             <defs>
               <filter id="logo-blur" x="0" y="0">
                 <feGaussianBlur in="SourceGraphic" stdDeviation="${SETTINGS.cardBlur}" />
