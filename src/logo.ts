@@ -17,7 +17,7 @@ export const formatColorToCSSString = (color:ColorWithAlpha|string, alphaOverrid
     }
     return hex;
   } else {
-    let rgbaArrFinal = [...color];
+    const rgbaArrFinal = [...color];
     if (alphaOverride !== 1) {
       rgbaArrFinal[3] = alphaOverride;
     }
@@ -29,8 +29,8 @@ export const formatColorToCSSString = (color:ColorWithAlpha|string, alphaOverrid
 const NS = "http://www.w3.org/2000/svg";
 
 export type generateLogoOptions = {
-  colorPairs?:ColorsRGBA[],
-  colorCenter?:ColorWithAlpha,
+  colorPairs:ColorsRGBA[],
+  colorCenter:ColorWithAlpha,
   innerPointRadius?:number,
   rings?:number,
   rotations?:number[],
@@ -112,9 +112,9 @@ export const generateLogo = ({
   colorCenter = [255, 255, 255, 1], // color of the center point
   innerPointRadius = 20, // radius of the inner point
   rings = 2,      // number of rings,
-  rotations = new Array(2 + 1).fill(0).map((_) => Math.random()),
-  rotationOffsets = new Array(2 + 1).fill(0).map((_) => Math.random()),
-  strokeLengths = new Array(2 + 1).fill(0).map((_) => Math.random() * 0.5 + 0.25),
+  rotations = new Array(2 + 1).fill(0).map(() => Math.random()),
+  rotationOffsets = new Array(2 + 1).fill(0).map(() => Math.random()),
+  strokeLengths = new Array(2 + 1).fill(0).map(() => Math.random() * 0.5 + 0.25),
   ringStrokeWidth = 20,   // stroke width of the rings
   idPrefix = `logo-0`,       // prefix for the ids of the elements so they can be styled more than once on a page 
   logoClass = `logo`,        // class name for the logo
@@ -168,7 +168,7 @@ export const generateLogo = ({
     $gradient.setAttribute("id", `${idPrefix}-gradient-${i}`);
     const r = diameters[i] / 2;
     let gradientAngle = 0;
-    let isInnerPoint = i === rings;
+    const isInnerPoint = i === rings;
     if (strokeLengths[i]) {
       gradientAngle = 180 + (calculateAngleForArc(strokeLengths[i] * 2 * Math.PI * r, r) / 2) + 90;
     }
