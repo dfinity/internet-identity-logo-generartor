@@ -1,6 +1,6 @@
 // the generator handles the generation of the of the logo 
 // it contains the generative rules for the creation of the logo
-import * as Rand from 'random-seed';
+import seedrandom from 'seedrandom';
 import { generateLogoOptions } from './logo';
 
 export type PossibleColorKey = 'blue' | 'pink' | 'purple' | 'yellow' | 'orange';
@@ -78,12 +78,12 @@ export const randomUniqueColorPairs = (colors: BrandColorsAsRGBAPairs, random:()
 
 // returns logo settings for a given seed
 export const generator = (seed:string):generateLogoOptions => {
-  const rand = Rand.create(seed);
-  const shuffledColorsAsRGBAPairs = randomUniqueColorPairs(brandColorsAsRGBAPairs, rand.random);
+  const rand = seedrandom(seed);
+  const shuffledColorsAsRGBAPairs = randomUniqueColorPairs(brandColorsAsRGBAPairs, rand);
   const centerColorAsRGBA = brandColorsAsRGBAforCenter[Math.floor(Math.random()*brandColorsAsRGBAforCenter.length)];
 
-  const rotation = rand.random(); // center rotation
-  const innerCircleLength = 0.45 + rand.random() * 0.30; 
+  const rotation = rand(); // center rotation
+  const innerCircleLength = 0.45 + rand() * 0.30; 
 
   return {
     colorPairs: shuffledColorsAsRGBAPairs,
@@ -92,13 +92,13 @@ export const generator = (seed:string):generateLogoOptions => {
     rings: 2,
     ringStrokeWidth: 15,
     rotations: [
-      ((rotation + innerCircleLength * .5) + (-0.1 + rand.random() * 0.2)) % 1, // rotate inner ring
+      ((rotation + innerCircleLength * .5) + (-0.1 + rand() * 0.2)) % 1, // rotate inner ring
       rotation, 
-      rotation + (-0.25 + rand.random() * 0.5), // most outer ring
+      rotation + (-0.25 + rand() * 0.5), // most outer ring
     ],
     rotationOffsets: [0, 0],
     strokeLengths: [
-      0.5 + rand.random() * 0.16, // outer ring
+      0.5 + rand() * 0.16, // outer ring
       innerCircleLength // inner ring
     ],
     gradientStops: [0.25, 0.75],

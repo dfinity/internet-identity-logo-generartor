@@ -13,7 +13,7 @@ import {
 } from './generator.ts';
 import anime from 'animejs/lib/anime.es.js';
 import { converter } from 'culori';
-import * as Rand from 'random-seed';
+import seedrandom from 'seedrandom';
 import colorNameList from 'color-name-list/dist/colornames.json';
 
 const toRgb = converter('rgb');
@@ -85,11 +85,11 @@ type Settings = {
 
 function reroll (newSeed?:string) {
   const seed = newSeed || colorNameList[Math.floor(Math.random() * colorNameList.length)].name;
-  const rand = Rand.create(seed);
+  const rand = seedrandom(seed);
   /*const colorsAsHex = colors.map((color) => formatHex({
     mode: 'oklch', l: color[0]/100, c: color[1], h: color[2]
   }));*/
-  const shuffeledColorsAsRGBAPairs = randomUniqueColorPairs(brandColorsAsRGBAPairs, rand.random);
+  const shuffeledColorsAsRGBAPairs = randomUniqueColorPairs(brandColorsAsRGBAPairs, rand);
 
   const shuffeledColorsAsRGBAPairsObj = shuffeledColorsAsRGBAPairs.map((colorPair) => {
     return colorPair.map((color) => {
@@ -97,24 +97,24 @@ function reroll (newSeed?:string) {
       return {r, g, b, a}
     })
   });
-  const centerColor = shuffleArray(brandColorsAsRGBAforCenter, rand.random)[0];
+  const centerColor = shuffleArray(brandColorsAsRGBAforCenter, rand)[0];
   const centerColorAsRGBA = {r: centerColor[0], g: centerColor[1], b: centerColor[2], a: centerColor[3]};
 
-  let rotation = rand.random();
-  let innserCricleLength = 0.45 + rand.random() * 0.30;
+  let rotation = rand();
+  let innserCricleLength = 0.45 + rand() * 0.30;
 
   const SETTINGS:Settings = {
     seed,
     innerPointRadius: 15,
     rings: 2,
     ringStrokeWidth: 15,
-    rotation1: ((rotation + innserCricleLength * .5) + (-0.1 + rand.random() * 0.2)) % 1, // rotate inner ring
+    rotation1: ((rotation + innserCricleLength * .5) + (-0.1 + rand() * 0.2)) % 1, // rotate inner ring
     rotation2: rotation,
-    rotation3: rotation + (-0.25 + rand.random() * 0.5),
+    rotation3: rotation + (-0.25 + rand() * 0.5),
     rotationOffset1: 0,
     rotationOffset2: 0,
 
-    strokeLengthOuter: 0.5 + rand.random() * 0.16,
+    strokeLengthOuter: 0.5 + rand() * 0.16,
     strokeLengthInner: innserCricleLength,
     
     strokeLinecap: 'round',
