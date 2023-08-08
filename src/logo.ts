@@ -1,6 +1,5 @@
 export type Color = [number, number, number];
 export type ColorWithAlpha = [number, number, number, number];
-export type ColorsHex = string[];
 export type ColorsRGBA = ColorWithAlpha[];
 export type StrokeLinecap = 'butt' | 'round' | 'square';
 
@@ -29,7 +28,7 @@ export const formatColorToCSSString = (color:ColorWithAlpha|string, alphaOverrid
 const NS = "http://www.w3.org/2000/svg";
 
 export type generateLogoOptions = {
-  colorPairs:ColorsRGBA[],
+  colorPairs: ColorsRGBA[],
   colorCenter:ColorWithAlpha,
   innerPointRadius?:number,
   rings?:number,

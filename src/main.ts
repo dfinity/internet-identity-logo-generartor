@@ -12,7 +12,7 @@ import {
   brandColorsAsRGBAforCenter,
 } from './generator.ts';
 import anime from 'animejs/lib/anime.es.js';
-import { converter, formatHex, formatHex8 } from 'culori';
+import { converter } from 'culori';
 import * as Rand from 'random-seed';
 import colorNameList from 'color-name-list/dist/colornames.json';
 
@@ -345,22 +345,9 @@ function drawEverything() {
 
   const innerPointColor = colorArr[0];
 
-  const innerColorHex = formatHex(`rgb(${innerPointColor.r}, ${innerPointColor.g}, ${innerPointColor.b})`);
-
-  const colors = colorPairs.map((pair) => {
-    return pair.map((color) => {
-      const {r, g, b, a} = color;
-      if (a < 1) {
-        return formatHex8(`rgba(${r}, ${g}, ${b}, ${a})`) || '#00000000';
-      } else {
-        return formatHex(`rgb(${r}, ${g}, ${b})`) || '#000000';
-      }
-    });
-  });
-
   $logo = generateLogo({
-    colorPairs: colors,
-    colorCenter: innerColorHex,
+    colorPairs: colorPairs.map(pair => pair.map(color => [color.r, color.g, color.b, color.a])),
+    colorCenter: [innerPointColor.r, innerPointColor.g, innerPointColor.b, innerPointColor.a],
     innerPointRadius: SETTINGS.innerPointRadius,
     rings: SETTINGS.rings,
     ringStrokeWidth: SETTINGS.ringStrokeWidth,
