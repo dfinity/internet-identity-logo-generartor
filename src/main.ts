@@ -1,13 +1,16 @@
 import './style.css';
 import { Pane } from 'tweakpane';
 import { 
-  generateLogo, 
-  shuffle,
+  generateLogo,
   StrokeLinecap,
+} from './logo.ts';
+import {
+  generator,
+  shuffleArray,
   randomUniqueColorPairs,
   brandColorsAsRGBAPairs,
   brandColorsAsRGBAforCenter,
-} from './logo.ts';
+} from './generator.ts';
 import anime from 'animejs/lib/anime.es.js';
 import { converter, formatHex, formatHex8 } from 'culori';
 import * as Rand from 'random-seed';
@@ -94,7 +97,7 @@ function reroll (newSeed?:string) {
       return {r, g, b, a}
     })
   });
-  const centerColor = shuffle(brandColorsAsRGBAforCenter, rand.random)[0];
+  const centerColor = shuffleArray(brandColorsAsRGBAforCenter, rand.random)[0];
   const centerColorAsRGBA = {r: centerColor[0], g: centerColor[1], b: centerColor[2], a: centerColor[3]};
 
   let rotation = rand.random();
@@ -422,6 +425,9 @@ function drawEverything() {
             </div>
           `;
         }).join('')}
+    </div>
+    <div class="logo">
+      ${generateLogo( generator(SETTINGS.seed) ).outerHTML}
     </div>
   `;
 

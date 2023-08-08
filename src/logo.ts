@@ -1,116 +1,8 @@
-// luma 0.0% - 100.0%, chroma 0.0 - 1.0 (0.4 being the practical border of the gamut), hue 0 - 360
 export type Color = [number, number, number];
 export type ColorWithAlpha = [number, number, number, number];
-export type ColorsOKLCH = Color[];
 export type ColorsHex = string[];
 export type ColorsRGBA = ColorWithAlpha[];
 export type StrokeLinecap = 'butt' | 'round' | 'square';
-
-// these are de Dfinity brand colors adapted in the OKLCH color space
-// to make use of the full gamut of colors a given display has to offer
-
-export const brandColorsOKLCH:ColorsOKLCH = [
-  //[2.79, 0.009, 0],
-  [68.97, 0.241, 38.21],
-  [81.62, 0.194, 73.74],
-  [66.03, 0.295, 2.63],
-  [38.68, 0.21, 300.4],
-  [71.32, 0.182, 232.37],
-];
-
-export const brandColorsRGBA:ColorsRGBA = [
-  [0, 178, 255, 1], // blue
-  [255, 0, 130, 1], // pink
-  [90, 0, 159, 1], // purple
-  [255, 171, 0, 1], // yellow
-  [255, 75, 0, 1], // orange
-];
-
-export const brandColorsAsRGBAforCenter:ColorsRGBA = [
-  [0, 178, 255, 1], // blue
-  [255, 0, 130, 1], // pink
-  [90, 0, 159, 1], // purple
-  [255, 171, 0, 1], // yellow
-];
-
-export type BrandColorsAsRGBAPairs = {
-  colorNames:string[],
-  colors:ColorsRGBA,
-}[];
-
-
-export const brandColorsAsRGBAPairs:BrandColorsAsRGBAPairs = [
-  {
-    colorNames: ['blue', 'pink'],
-    colors: [
-      [0, 178, 255, 1], // blue
-      [255, 0, 130, 1], // pink
-    ],
-  },
-  {
-    colorNames: ['purple', 'blue'],
-    colors: [
-      [90, 0, 159, 1], // purple
-      [0, 178, 255, 1], // blue
-    ]
-  },
-  {
-    colorNames: ['purple', 'pink'],
-    colors: [
-      [90, 0, 159, 1], // purple
-      [255, 0, 130, 1], // pink
-    ]
-  },
-  {
-    colorNames: ['yellow', 'orange'],
-    colors: [
-      [255, 171, 0, 1], // yellow
-      [255, 75, 0, 1], // orange
-    ]
-  },
-  {
-    colorNames: ['orange', 'pink'],
-    colors: [
-      [255, 75, 0, 1], // orange
-      [255, 0, 130, 1], // pink
-    ]
-  },
-  {
-    colorNames: ['yellow', 'purple'],
-    colors: [
-      [255, 171, 0, 1], // yellow
-      [90, 0, 159, 1], // purple
-    ]
-  },
-];
-
-export const randomUniqueColorPairs = (colors: BrandColorsAsRGBAPairs, random:() => number = Math.random) => {
-  const shuffeledColors = shuffle(colors, random);
-  const colorNamesInUse:string[] = [];
-  return shuffeledColors.filter((colorPair) => {
-    const colorName = colorPair.colorNames[0];
-    const colorName2 = colorPair.colorNames[1];
-    if (colorNamesInUse.includes(colorName) || colorNamesInUse.includes(colorName2)) {
-      return false;
-    } else {
-      colorNamesInUse.push(colorName);
-      colorNamesInUse.push(colorName2);
-      return true;
-    }
-  }).map(pair => pair.colors);
-}
-
-
-
-// function that returns a new shuffled array
-export const shuffle = <T>(array:T[], random:() => number = Math.random) => {
-  const arrayCopy = [...array];
-  for (let i = arrayCopy.length - 1; i > 0; i--) {
-    const j = Math.floor(random() * (i + 1));
-    [arrayCopy[i], arrayCopy[j]] = [arrayCopy[j], arrayCopy[i]];
-  }
-  return arrayCopy;
-}
 
 // formatColorToCSSString converts a color in the OKLCH color space to a CSS color string
 export const formatColorToCSSString = (color:ColorWithAlpha|string, alphaOverride = 1) => {
@@ -137,8 +29,8 @@ export const formatColorToCSSString = (color:ColorWithAlpha|string, alphaOverrid
 const NS = "http://www.w3.org/2000/svg";
 
 export type generateLogoOptions = {
-  colorPairs?:ColorsRGBA[]|ColorsHex[],
-  colorCenter?:ColorWithAlpha|string,
+  colorPairs?:ColorsRGBA[],
+  colorCenter?:ColorWithAlpha,
   innerPointRadius?:number,
   rings?:number,
   rotations?:number[],
@@ -216,7 +108,7 @@ const calculateAngleForArc = (arcLength: number, radius: number) => {
 
 // function that returns the generated logo SVG
 export const generateLogo = ({
-  colorPairs = brandColorsAsRGBAPairs.map(c => c.colors),     // all available colors in the OKLCH color space
+  colorPairs, // color pairs as array of color pairs as RGBA arrays
   colorCenter = [255, 255, 255, 1], // color of the center point
   innerPointRadius = 20, // radius of the inner point
   rings = 2,      // number of rings,
@@ -230,6 +122,8 @@ export const generateLogo = ({
   strokeLinecap = 'round',  // stroke linecap
   showDesignRules = false,  // show design rules
 }: generateLogoOptions) => {
+
+  // create the svg element 
   const $svg = document.createElementNS(NS, "svg");
 
   // set all the standard attributes for the svg
@@ -237,15 +131,16 @@ export const generateLogo = ({
   $svg.setAttribute("version", "1.1");
 
   const innerPointDiameter = innerPointRadius * 2;
-  const viewBoxSize = rings * ringStrokeWidth + innerPointDiameter;
 
+  // define the viewBox size based on the number of rings and the ringStrokeWidth
+  const viewBoxSize = rings * ringStrokeWidth + innerPointDiameter;
   $svg.setAttribute("viewBox", `0 0 ${viewBoxSize} ${viewBoxSize}`);
 
   $svg.classList.add(logoClass);
 
+  // create the defs element that contains the gradients and masks
   const $defs = document.createElementNS(NS, "defs"); // contains the gradients & masks
   const $style = document.createElementNS(NS, "style");
-
   $defs.appendChild($style);
   $svg.appendChild($defs);
 
@@ -257,15 +152,16 @@ export const generateLogo = ({
     }
   `;
 
-
+  // create the rings
   const diameters = new Array(rings).fill(0).map((_, i) => viewBoxSize - i * ringStrokeWidth);
 
-  // add white background inner circle
-  $svg.appendChild(circle(viewBoxSize / 2, viewBoxSize / 2, innerPointRadius, 'white'));
+  // add white background below the inner circle
+  $svg.appendChild(circle(viewBoxSize / 2, viewBoxSize / 2, innerPointRadius, 'var(--bg, #fff)'));
 
-  // create gradients for the rings and the inner point
+  // create SVG gradients for the rings and the inner circle
   const gradients = new Array(rings + 1).fill(0).map(() => document.createElementNS(NS, "linearGradient"));
 
+  // create color pairs for those gradients
   const gradientColorPairs = [...colorPairs, [colorCenter, colorCenter]];
   
   gradients.forEach(($gradient, i) => {
@@ -357,14 +253,13 @@ export const generateLogo = ({
 
   $gradientRects.reverse().forEach(($rect) => $svg.appendChild($rect));
 
-  // show design reules
+  // show design rules
   if (showDesignRules) {
     const $designRules = document.createElementNS(NS, "g");
     $designRules.setAttribute("class", "design-rules");
 
     const $designRulesTop = document.createElementNS(NS, "g");
     $designRules.setAttribute("class", "design-rules");
-
 
     // for each ring show a little line that indicates the stroke width
     diameters.forEach((d, i) => {
