@@ -7,11 +7,11 @@ export type StrokeLinecap = 'butt' | 'round' | 'square';
 export const formatColorToCSSString = (color:ColorWithAlpha|string, alphaOverride = 1) => {
   if (typeof color === 'string') {
     let hex = color;
-    if (hex.length == 4) {
+    if (hex.length === 4) {
       return hex;
-    } else if (hex.length == 7 && alphaOverride !== 1) {
+    } else if (hex.length === 7 && alphaOverride !== 1) {
       hex = hex + Math.round(alphaOverride * 255).toString(16);
-    } else if (hex.length == 9 && alphaOverride) {
+    } else if (hex.length === 9 && alphaOverride) {
       hex = hex.slice(0, 7) + Math.round(alphaOverride * 255).toString(16);
     }
     return hex;
