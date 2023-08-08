@@ -1,7 +1,7 @@
 // the generator handles the generation of the of the logo 
 // it contains the generative rules for the creation of the logo
 import seedrandom from 'seedrandom';
-import { generateLogoOptions } from './logo';
+import { GenerateLogoOptions } from './logo';
 
 export type PossibleColorKey = 'blue' | 'pink' | 'purple' | 'yellow' | 'orange';
 export type ColorWithAlpha = [number, number, number, number];
@@ -77,7 +77,7 @@ export const randomUniqueColorPairs = (colors: BrandColorsAsRGBAPairs, random:()
 }
 
 // returns logo settings for a given seed
-export const generator = (seed:string):generateLogoOptions => {
+export const generator = (seed:string):GenerateLogoOptions => {
   const rand = seedrandom(seed);
   const shuffledColorsAsRGBAPairs = randomUniqueColorPairs(brandColorsAsRGBAPairs, rand);
   const centerColorAsRGBA = brandColorsAsRGBAforCenter[Math.floor(Math.random()*brandColorsAsRGBAforCenter.length)];

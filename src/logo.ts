@@ -27,7 +27,7 @@ export const formatColorToCSSString = (color:ColorWithAlpha|string, alphaOverrid
 // svg namespace for element creation
 const NS = "http://www.w3.org/2000/svg";
 
-export type generateLogoOptions = {
+export type GenerateLogoOptions = {
   colorPairs: ColorsRGBA[],
   colorCenter:ColorWithAlpha,
   innerPointRadius?:number,
@@ -120,7 +120,7 @@ export const generateLogo = ({
   gradientStops = [.2, .8], // stops percents for the gradients
   strokeLinecap = 'round',  // stroke linecap
   showDesignRules = false,  // show design rules
-}: generateLogoOptions) => {
+}: GenerateLogoOptions) => {
 
   // create the svg element 
   const $svg = document.createElementNS(NS, "svg");
