@@ -20,6 +20,10 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
+defaults:
+  run:
+    working-directory: design-lab
+
 jobs:
   # Single deploy job since we're just deploying
   deploy:
@@ -36,14 +40,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-      - run: cd design-lab
       - run: npm ci
       - run: npm run build --if-present
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload entire repository
-          path: './design-lab/dist'
+          path: './dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
