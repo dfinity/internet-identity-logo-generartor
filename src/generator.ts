@@ -53,11 +53,13 @@ export const brandColorsAsRGBAPairs:BrandColorsAsRGBAPairs = possibleColorPairKe
 // function that returns a new shuffled array
 export const shuffleArray = <T>(array:T[], random:() => number = Math.random) => {
   const arrayCopy = [...array];
-  for (let i = arrayCopy.length - 1; i > 0; i--) {
-    const j = Math.floor(random() * (i + 1));
-    [arrayCopy[i], arrayCopy[j]] = [arrayCopy[j], arrayCopy[i]];
+  const newArray = [];
+  while (arrayCopy.length > 0) {
+    const randomIndex = Math.floor(random() * arrayCopy.length);
+    newArray.push(arrayCopy[randomIndex]);
+    arrayCopy.splice(randomIndex, 1);
   }
-  return arrayCopy;
+  return newArray;
 }
 
 export const randomUniqueColorPairs = (colors: BrandColorsAsRGBAPairs, random:() => number = Math.random) => {
