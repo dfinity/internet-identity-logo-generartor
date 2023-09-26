@@ -3,14 +3,12 @@ import { Pane } from 'tweakpane';
 import { 
   generateLogo,
   StrokeLinecap,
-} from '../../src/logo';
-import {
   generator,
   shuffleArray,
   randomUniqueColorPairs,
   brandColorsAsRGBAPairs,
   brandColorsAsRGBAforCenter,
-} from '../../src/generator';
+} from '../../.';
 import anime from 'animejs/lib/anime.es.js';
 import { converter } from 'culori';
 import seedrandom from 'seedrandom';
