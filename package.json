@@ -24,6 +24,9 @@
   ],
   "author": "",
   "license": "MIT",
+  "dependencies": {
+    "seedrandom": "^3.0.5"
+  },
   "devDependencies": {
     "@types/node": "^20.7.0",
     "@types/seedrandom": "^3.0.5",
@@ -32,8 +35,5 @@
     "eslint": "^8.46.0",
     "typescript": "^5.1.6",
     "vite": "^4.3.9"
-  },
-  "dependencies": {
-    "seedrandom": "^3.0.5"
   }
 }
