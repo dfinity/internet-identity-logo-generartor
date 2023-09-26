@@ -94,8 +94,8 @@ function reroll (newSeed?:string) {
       return {r, g, b, a}
     })
   });
-  const centerColor = shuffleArray(brandColorsAsRGBAforCenter, rand)[0];
-  const centerColorAsRGBA = {r: centerColor[0], g: centerColor[1], b: centerColor[2], a: centerColor[3]};
+  const centerColor = shuffleArray(brandColorsAsRGBAforCenter, rand)![0];
+  const centerColorAsRGBA = {r: centerColor![0], g: centerColor![1], b: centerColor![2], a: centerColor![3]};
 
   const rotation = rand();
   const innserCricleLength = 0.45 + rand() * 0.30;
