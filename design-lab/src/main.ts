@@ -1,16 +1,14 @@
 import './style.css';
 import { Pane } from 'tweakpane';
-import { 
+import {
   generateLogo,
   StrokeLinecap,
-} from '../../src/logo';
-import {
   generator,
   shuffleArray,
   randomUniqueColorPairs,
   brandColorsAsRGBAPairs,
   brandColorsAsRGBAforCenter,
-} from '../../src/generator';
+} from '../dist/internet-identity-generative-logo.es.js';
 import anime from 'animejs/lib/anime.es.js';
 import { converter } from 'culori';
 import seedrandom from 'seedrandom';

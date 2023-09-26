@@ -165,11 +165,11 @@ export const generateLogo = ({
   
   gradients.forEach(($gradient, i) => {
     $gradient.setAttribute("id", `${idPrefix}-gradient-${i}`);
-    const r = diameters[i] / 2;
+    const r = (diameters![i] || 0) / 2 ;
     let gradientAngle = 0;
     const isInnerPoint = i === rings;
     if (strokeLengths[i]) {
-      gradientAngle = 180 + (calculateAngleForArc(strokeLengths[i] * 2 * Math.PI * r, r) / 2) + 90;
+      gradientAngle = 180 + (calculateAngleForArc((strokeLengths![i] || 0) * 2 * Math.PI * r, r) / 2) + 90;
     }
     $gradient.setAttribute("gradientTransform", `rotate(${gradientAngle} .5 .5)`);
     $gradient.setAttribute("gradientUnits", `objectBoundingBox`); // userSpaceOnUse
@@ -178,8 +178,8 @@ export const generateLogo = ({
 
     // set two random colors stops for each gradient
     $gradient.innerHTML = `
-      <stop offset="${isInnerPoint ? 0 : gradientStops[0] * 100}%" stop-color="${formatColorToCSSString(currentColorPair[1])}"/>
-      <stop offset="${isInnerPoint ? 100 : gradientStops[1] * 100}%" stop-opacity="0" stop-color="${formatColorToCSSString(currentColorPair[1])}"/>
+      <stop offset="${isInnerPoint ? 0 : (gradientStops[0] || 0) * 100}%" stop-color="${formatColorToCSSString((currentColorPair![1] || [0,0,0,1]))}"/>
+      <stop offset="${isInnerPoint ? 100 : (gradientStops![1] || 0) * 100}%" stop-opacity="0" stop-color="${formatColorToCSSString((currentColorPair![1] || [0,0,0,1]))}"/>
     `;
 
     $gradient.classList.add('gradient');
@@ -197,7 +197,9 @@ export const generateLogo = ({
     const $rect = rect(
       left, top, 
       d, d, 
-      `${formatColorToCSSString(colorPairs[i % colorPairs.length][0])}`
+      `${formatColorToCSSString(
+        (colorPairs![i % colorPairs.length]![0] || 'rgba(0,0,0,0)')
+      )}`
     );
 
     $rect.style.setProperty("--rotation", `${rotations[i + 1]}`);
@@ -211,7 +213,7 @@ export const generateLogo = ({
       r - ringStrokeWidth / 2,
       ringStrokeWidth,
       0,
-      strokeLengths[i],
+      (strokeLengths![i] || 0),
       strokeLinecap,
     );
 

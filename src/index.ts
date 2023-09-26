@@ -1,3 +1,13 @@
 // src/index.ts
-export { generator } from './generator';
-export { generateLogo } from './logo';
+export { 
+  generator,
+  shuffleArray,
+  randomUniqueColorPairs,
+  brandColorsAsRGBAPairs,
+  brandColorsAsRGBAforCenter,
+} from './generator';
+export { 
+  generateLogo,
+  type StrokeLinecap, 
+} from './logo';
+

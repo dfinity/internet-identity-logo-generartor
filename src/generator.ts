@@ -64,8 +64,8 @@ export const randomUniqueColorPairs = (colors: BrandColorsAsRGBAPairs, random:()
   const shuffeledColors = shuffleArray(colors, random);
   const colorNamesInUse:string[] = [];
   return shuffeledColors.filter((colorPair) => {
-    const colorName = colorPair.colorNames[0];
-    const colorName2 = colorPair.colorNames[1];
+    const colorName = colorPair.colorNames[0] as PossibleColorKey;
+    const colorName2 = colorPair.colorNames[1] as PossibleColorKey;
     if (colorNamesInUse.includes(colorName) || colorNamesInUse.includes(colorName2)) {
       return false;
     } else {
@@ -80,7 +80,7 @@ export const randomUniqueColorPairs = (colors: BrandColorsAsRGBAPairs, random:()
 export const generator = (seed:string):GenerateLogoOptions => {
   const rand = seedrandom(seed);
   const shuffledColorsAsRGBAPairs = randomUniqueColorPairs(brandColorsAsRGBAPairs, rand);
-  const centerColorAsRGBA = brandColorsAsRGBAforCenter[Math.floor(Math.random()*brandColorsAsRGBAforCenter.length)];
+  const centerColorAsRGBA = brandColorsAsRGBAforCenter[Math.floor(Math.random()*brandColorsAsRGBAforCenter.length)] as ColorWithAlpha;
 
   const rotation = rand(); // center rotation
   const innerCircleLength = 0.45 + rand() * 0.30; 
