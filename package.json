@@ -2,16 +2,20 @@
   "name": "internet-identity-generative-logo",
   "version": "1.0.0",
   "description": "generative logo for internet identity",
-  "main": "index.js",  
   "type": "module",
+  "main": "./dist/internet-identity-generative-logo.umd.js",
+  "module": "./dist/internet-identity-generative-logo.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/internet-identity-generative-logo.es.js",
+      "require": "./dist/internet-identity-generative-logo.umd.js"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
     "lint": "npx eslint src/logo.ts src/generator.ts"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "logo",
@@ -21,10 +25,10 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^20.7.0",
     "@types/seedrandom": "^3.0.5",
     "@typescript-eslint/eslint-plugin": "^6.3.0",
     "@typescript-eslint/parser": "^6.3.0",
-
     "eslint": "^8.46.0",
     "typescript": "^5.1.6",
     "vite": "^4.3.9"

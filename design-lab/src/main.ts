@@ -419,7 +419,7 @@ function drawEverything() {
   if (timer) {
     clearTimeout(timer);
   }
-  timer = setTimeout(() => {
+  timer = window.setTimeout(() => {
     updateFavicon($logo as SVGElement);
     updateSettings();
   }, 500);
