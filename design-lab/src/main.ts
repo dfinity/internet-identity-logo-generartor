@@ -99,8 +99,8 @@ function reroll (newSeed?:string) {
   const centerColor = shuffleArray(brandColorsAsRGBAforCenter, rand)[0];
   const centerColorAsRGBA = {r: centerColor[0], g: centerColor[1], b: centerColor[2], a: centerColor[3]};
 
-  let rotation = rand();
-  let innserCricleLength = 0.45 + rand() * 0.30;
+  const rotation = rand();
+  const innserCricleLength = 0.45 + rand() * 0.30;
 
   const SETTINGS:Settings = {
     seed,
