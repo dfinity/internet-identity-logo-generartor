@@ -15,9 +15,6 @@
 
 }
 
-
-
-
 @font-face {
   font-family: 'strawfordbold';
   src: url('/font/strawford-bold-webfont.eot');
@@ -28,9 +25,6 @@
   font-weight: normal;
   font-style: normal;
 }
-
-
-
 
 @font-face {
   font-family: 'strawfordextralight';
@@ -44,9 +38,6 @@
 
 }
 
-
-
-
 @font-face {
   font-family: 'strawfordlight';
   src: url('/font/strawford-light-webfont.eot');
@@ -58,9 +49,6 @@
   font-style: normal;
 
 }
-
-
-
 
 @font-face {
   font-family: 'strawfordmedium';
@@ -74,9 +62,6 @@
 
 }
 
-
-
-
 @font-face {
   font-family: 'strawfordregular';
   src: url('/font/strawford-regular-webfont.eot');
@@ -88,9 +73,6 @@
   font-style: normal;
 
 }
-
-
-
 
 @font-face {
   font-family: 'strawfordthin';

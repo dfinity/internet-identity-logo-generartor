@@ -3,14 +3,14 @@ import { Pane } from 'tweakpane';
 import { 
   generateLogo,
   StrokeLinecap,
-} from './logo.ts';
+} from '../../src/logo';
 import {
   generator,
   shuffleArray,
   randomUniqueColorPairs,
   brandColorsAsRGBAPairs,
   brandColorsAsRGBAforCenter,
-} from './generator.ts';
+} from '../../src/generator';
 import anime from 'animejs/lib/anime.es.js';
 import { converter } from 'culori';
 import seedrandom from 'seedrandom';
@@ -82,7 +82,6 @@ type Settings = {
   cardMixBlendMode: string,
 }
 
-
 function reroll (newSeed?:string) {
   const seed = newSeed || colorNameList[Math.floor(Math.random() * colorNameList.length)].name;
   const rand = seedrandom(seed);
@@ -113,7 +112,6 @@ function reroll (newSeed?:string) {
     rotation3: rotation + (-0.25 + rand() * 0.5),
     rotationOffset1: 0,
     rotationOffset2: 0,
-
     strokeLengthOuter: 0.5 + rand() * 0.16,
     strokeLengthInner: innserCricleLength,
     
