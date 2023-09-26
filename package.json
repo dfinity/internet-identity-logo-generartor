@@ -14,8 +14,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && npm run build:dts && vite build",
-    "build:dts": "tsc --emitDeclarationOnly",
+    "build": "tsc && vite build",
     "lint": "npx eslint src/logo.ts src/generator.ts"
   },
   "keywords": [
@@ -35,6 +34,7 @@
     "@typescript-eslint/parser": "^6.3.0",
     "eslint": "^8.46.0",
     "typescript": "^5.1.6",
-    "vite": "^4.3.9"
+    "vite": "^4.3.9",
+    "vite-plugin-dts": "^3.6.0"
   }
 }
