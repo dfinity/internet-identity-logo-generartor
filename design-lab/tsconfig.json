@@ -19,5 +19,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/main.ts"]
+  "include": ["src", "design-lab/src/main.ts"]
 }

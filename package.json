@@ -1,27 +1,35 @@
 {
-  "name": "internet-identity-logo-generator",
-  "private": true,
-  "version": "0.0.0",
+  "name": "internet-identity-generative-logo",
+  "version": "1.0.0",
+  "description": "generative logo for internet identity",
   "type": "module",
+  "main": "./dist/internet-identity-generative-logo.umd.js",
+  "module": "./dist/internet-identity-generative-logo.es.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/internet-identity-generative-logo.es.js",
+      "require": "./dist/internet-identity-generative-logo.umd.js"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
     "lint": "npx eslint src/logo.ts src/generator.ts"
   },
+  "keywords": [
+    "logo",
+    "generative",
+    "internet-computer"
+  ],
+  "author": "",
+  "license": "MIT",
   "devDependencies": {
-    "@tweakpane/core": "^1.1.9",
-    "@types/animejs": "^3.1.7",
-    "@types/culori": "^2.0.0",
-    "@types/random-seed": "^0.3.3",
+    "@types/node": "^20.7.0",
     "@types/seedrandom": "^3.0.5",
     "@typescript-eslint/eslint-plugin": "^6.3.0",
     "@typescript-eslint/parser": "^6.3.0",
-    "animejs": "^3.2.1",
-    "color-name-list": "^10.10.0",
-    "culori": "^3.1.3",
     "eslint": "^8.46.0",
-    "tweakpane": "^3.1.10",
     "typescript": "^5.1.6",
     "vite": "^4.3.9"
   },
