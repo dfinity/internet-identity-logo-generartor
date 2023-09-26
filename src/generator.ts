@@ -82,7 +82,7 @@ export const randomUniqueColorPairs = (colors: BrandColorsAsRGBAPairs, random:()
 export const generator = (seed:string):GenerateLogoOptions => {
   const rand = seedrandom(seed);
   const shuffledColorsAsRGBAPairs = randomUniqueColorPairs(brandColorsAsRGBAPairs, rand);
-  const centerColorAsRGBA = brandColorsAsRGBAforCenter[Math.floor(Math.random()*brandColorsAsRGBAforCenter.length)] as ColorWithAlpha;
+  const centerColorAsRGBA = brandColorsAsRGBAforCenter[Math.floor(rand()*brandColorsAsRGBAforCenter.length)] as ColorWithAlpha;
 
   const rotation = rand(); // center rotation
   const innerCircleLength = 0.45 + rand() * 0.30; 
