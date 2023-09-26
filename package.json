@@ -14,7 +14,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "tsc && npm run build:dts && vite build",
+    "build:dts": "tsc --emitDeclarationOnly",
     "lint": "npx eslint src/logo.ts src/generator.ts"
   },
   "keywords": [

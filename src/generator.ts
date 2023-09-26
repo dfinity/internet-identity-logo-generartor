@@ -66,8 +66,8 @@ export const randomUniqueColorPairs = (colors: BrandColorsAsRGBAPairs, random:()
   const shuffeledColors = shuffleArray(colors, random);
   const colorNamesInUse:string[] = [];
   return shuffeledColors.filter((colorPair) => {
-    const colorName = colorPair.colorNames[0] as PossibleColorKey;
-    const colorName2 = colorPair.colorNames[1] as PossibleColorKey;
+    const colorName = colorPair!.colorNames[0] as PossibleColorKey;
+    const colorName2 = colorPair!.colorNames[1] as PossibleColorKey;
     if (colorNamesInUse.includes(colorName) || colorNamesInUse.includes(colorName2)) {
       return false;
     } else {
@@ -75,7 +75,7 @@ export const randomUniqueColorPairs = (colors: BrandColorsAsRGBAPairs, random:()
       colorNamesInUse.push(colorName2);
       return true;
     }
-  }).map(pair => pair.colors);
+  }).map(pair => pair!.colors);
 }
 
 // returns logo settings for a given seed
