@@ -1,5 +1,4 @@
-Internet Identity Logo Generator
----
+# Internet Identity Logo Generator
 
 An Experimental Logo Generator
 
