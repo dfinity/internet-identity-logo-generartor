@@ -260,3 +260,9 @@ svg rect, svg circle{
   display: block;
   margin-bottom: 5rem;
 }
+
+#logoCanvas {
+  display: block;
+  margin-bottom: 5rem;
+  width: 600px
+}
