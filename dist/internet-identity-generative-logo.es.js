@@ -440,7 +440,7 @@ const gt = /* @__PURE__ */ rt($t), H = {
     return c.includes(h) || c.includes(A) ? !1 : (c.push(h), c.push(A), !0);
   }).map((f) => f.colors);
 }, St = (l) => {
-  const x = gt(l), u = Et(wt, x), c = W[Math.floor(Math.random() * W.length)], f = x(), h = 0.45 + x() * 0.3;
+  const x = gt(l), u = Et(wt, x), c = W[Math.floor(x() * W.length)], f = x(), h = 0.45 + x() * 0.3;
   return {
     colorPairs: u,
     colorCenter: c,

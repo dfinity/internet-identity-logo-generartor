@@ -255,3 +255,8 @@ svg rect, svg circle{
   display: block;
   text-transform: capitalize;
 }
+
+#canvas {
+  display: block;
+  margin-bottom: 5rem;
+}
