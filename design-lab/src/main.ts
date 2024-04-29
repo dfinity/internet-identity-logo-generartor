@@ -454,7 +454,7 @@ function drawEverything() {
 
       // remove the blur and set the mix blend mode
       ctx.filter = 'none';
-      ctx.globalCompositeOperation = SETTINGS.cardMixBlendMode;
+      ctx.globalCompositeOperation = SETTINGS.cardMixBlendMode as GlobalCompositeOperation;
       ctx.globalAlpha = SETTINGS.cardOverlayOpacity;
 
       ctx.drawImage(image, 
