@@ -363,6 +363,10 @@ function drawEverything() {
       <a href="${svgToDataUri($logo.outerHTML)}" download="internet-identity-logo.svg"> 
         <div class="logo logo--main">${$logo.outerHTML}</div>
       </a>
+
+      <div class="logoCanvas">
+        <canvas id="logoCanvas" width="1000" height="1000"></canvas>
+      </div>
       
       <div class="logo logo--line">
         <h2>Logo Inline</h2>
@@ -458,6 +462,21 @@ function drawEverything() {
         (200 - 900 * 1.2) / 2, 
         60 * canvasMultiplier * 10, 60 * canvasMultiplier * 10
       );
+    }
+  }
+
+  const $logoCanvas = document.querySelector<HTMLCanvasElement>('#logoCanvas');
+  const ctxLogo = $logoCanvas?.getContext('2d');
+
+  if ($logoCanvas && ctxLogo) {
+    $logoCanvas.width = 1000;
+    $logoCanvas.height = 1000;
+
+    const image = new Image();
+    image.src = svgToDataUri($logo.outerHTML);
+
+    image.onload = () => {
+      ctxLogo.drawImage(image, 0, 0, 1000, 1000);
     }
   }
 }
