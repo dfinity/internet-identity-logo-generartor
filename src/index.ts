@@ -6,6 +6,7 @@ export {
   brandColorsAsRGBAPairs,
   brandColorsAsRGBAforCenter,
 } from './generator';
+
 export { 
   generateLogo,
   type StrokeLinecap, 

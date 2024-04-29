@@ -375,7 +375,7 @@ function drawEverything() {
       <div class="">
         <h2>Logo Cards</h2>
         <div class="c-card c-card--logo">
-          <svg viewBox="0 0 368 200" style="--bg: transparent;">
+          <svg viewBox="0 0 368 200" style="--bg: transparent;" id="logocard">
             <defs>
               <filter id="logo-blur" x="0" y="0">
                 <feGaussianBlur in="SourceGraphic" stdDeviation="${SETTINGS.cardBlur}" />
@@ -389,6 +389,10 @@ function drawEverything() {
             ${Math.round( Math.random() * 1000000000)}
           </strong>
         </div>
+
+        <h2>Logo Canvas</h2>
+        <canvas id="canvas" width="368" height="200"></canvas>
+        
       </div>
 
       <div class="logo logo--stacked">
@@ -421,6 +425,41 @@ function drawEverything() {
     updateFavicon($logo as SVGElement);
     updateSettings();
   }, 500);
+
+  const $canvas = document.querySelector<HTMLCanvasElement>('#canvas');
+  const ctx = $canvas?.getContext('2d');
+
+  const canvasMultiplier = 1.5;
+
+  if ($canvas && ctx) {
+    $canvas.width = 368;
+    $canvas.height = 200;
+
+    const image = new Image();
+    image.src = svgToDataUri($logo.outerHTML);
+
+    image.onload = () => {
+      // set canvas to blur the image
+      ctx.filter = `blur(${SETTINGS.cardBlur}px)`;
+      
+      ctx.drawImage(image, 
+        (368 - 900 * 1.2) / 2, 
+        (200 - 900 * 1.2) / 2, 
+        60 * 15, 60 * 15
+      );
+
+      // remove the blur and set the mix blend mode
+      ctx.filter = 'none';
+      ctx.globalCompositeOperation = SETTINGS.cardMixBlendMode;
+      ctx.globalAlpha = SETTINGS.cardOverlayOpacity;
+
+      ctx.drawImage(image, 
+        (368 - 900 * 1.2) / 2, 
+        (200 - 900 * 1.2) / 2, 
+        60 * canvasMultiplier * 10, 60 * canvasMultiplier * 10
+      );
+    }
+  }
 }
 
 type SvgInHtml = HTMLElement & SVGElement;
