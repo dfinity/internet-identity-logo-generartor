@@ -27,6 +27,10 @@
     "ic",
     "icp"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dfinity/internet-identity-logo-generartor.git"
+  },
   "bugs": {
     "url": "https://github.com/dfinity/internet-identity-logo-generartor/issues"
   },
