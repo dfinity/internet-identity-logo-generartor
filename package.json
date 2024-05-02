@@ -1,7 +1,7 @@
 {
-  "name": "internet-identity-generative-logo",
+  "name": "@dfinity/internet-identity-generative-logo",
   "version": "1.0.0",
-  "description": "generative logo for internet identity",
+  "description": "Generative logo for internet identity",
   "type": "module",
   "main": "./dist/internet-identity-generative-logo.umd.js",
   "module": "./dist/internet-identity-generative-logo.es.js",
@@ -21,10 +21,22 @@
   "keywords": [
     "logo",
     "generative",
-    "internet-computer"
+    "internet-computer",
+    "dfinity",
+    "internet identity",
+    "ic",
+    "icp"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dfinity/internet-identity-logo-generartor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dfinity/internet-identity-logo-generartor/issues"
+  },
+  "homepage": "https://github.com/dfinity/internet-identity-logo-generartor#readme",
   "author": "",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "seedrandom": "^3.0.5"
   },
