@@ -36,7 +36,7 @@
   },
   "homepage": "https://github.com/dfinity/internet-identity-logo-generartor#readme",
   "author": "",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "dependencies": {
     "seedrandom": "^3.0.5"
   },
