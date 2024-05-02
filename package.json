@@ -21,8 +21,16 @@
   "keywords": [
     "logo",
     "generative",
-    "internet-computer"
+    "internet-computer",
+    "dfinity",
+    "internet identity",
+    "ic",
+    "icp"
   ],
+  "bugs": {
+    "url": "https://github.com/dfinity/internet-identity-logo-generartor/issues"
+  },
+  "homepage": "https://github.com/dfinity/internet-identity-logo-generartor#readme",
   "author": "",
   "license": "MIT",
   "dependencies": {
