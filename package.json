@@ -1,7 +1,7 @@
 {
-  "name": "internet-identity-generative-logo",
+  "name": "@dfinity/internet-identity-generative-logo",
   "version": "1.0.0",
-  "description": "generative logo for internet identity",
+  "description": "Generative logo for internet identity",
   "type": "module",
   "main": "./dist/internet-identity-generative-logo.umd.js",
   "module": "./dist/internet-identity-generative-logo.es.js",
